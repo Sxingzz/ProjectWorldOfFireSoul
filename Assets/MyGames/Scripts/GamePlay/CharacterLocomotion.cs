@@ -33,16 +33,15 @@ public class CharacterLocomotion : MonoBehaviour
         isSprinting = Input.GetKey(KeyCode.LeftShift);
         isJumping = Input.GetKeyDown(KeyCode.Space);
 
-        float speedMultiplier = isSprinting ? SprintingSpeed : 1.0f;
 
-        animator.SetFloat("InputX", userInput.x * speedMultiplier);
-        animator.SetFloat("InputY", userInput.y * speedMultiplier);
+        animator.SetFloat("InputX", userInput.x);
+        animator.SetFloat("InputY", userInput.y);
 
-        print($"User Input: {userInput}");
+        //print($"User Input: {userInput}");
 
         if (isSprinting)
         {
-            jump();
+            //jump();
         }
 
     }
@@ -53,4 +52,21 @@ public class CharacterLocomotion : MonoBehaviour
             rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
         }
     }
+
+    //private void OnAnimatorMove()
+    //{
+    //    Vector3 position = animator.deltaPosition;
+
+    //    position.y = 0;
+
+ 
+    //    float speedMultiplier = isSprinting ? SprintingSpeed : 1.0f;
+    //    Debug.Log(speedMultiplier);
+
+    //    if ( isSprinting )
+    //    {
+    //        position *= speedMultiplier;
+    //        transform.position = position;
+    //    }
+    //}
 }
