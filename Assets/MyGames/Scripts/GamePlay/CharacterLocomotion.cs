@@ -5,25 +5,26 @@ using UnityEngine;
 public class CharacterLocomotion : MonoBehaviour
 {
     private Animator animator;
+    private CharacterController characterController;
     private Vector2 userInput;
 
     private bool isSprinting;
     private bool isJumping;
     private bool isGrounded;
 
-    private CharacterController characterController;
     private float originalStepOffset;
     private float yForce;
     private float? lastGroundedTime;
     private float? jumpButtonPressTime;
     private float turnSpeed;
+    private float defaultSpeed;
 
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float sprintingSpeed = 1.5f;
     [SerializeField] private float jumpForce = 3.0f;
-    [SerializeField] private float jumpSpeed;
-    [SerializeField] private float gravityMultiplier;
-    [SerializeField] private float jumpButtonGracePeriod;
+    [SerializeField] private float jumpSpeed = 5f;
+    [SerializeField] private float gravityMultiplier = 1.5f;
+    [SerializeField] private float jumpButtonGracePeriod = 0.2f;
     
 
     void Start()
@@ -31,6 +32,7 @@ public class CharacterLocomotion : MonoBehaviour
         animator = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
         originalStepOffset = characterController.stepOffset;
+        defaultSpeed = moveSpeed;
 
         CharacterAiming characterAimingScript = FindObjectOfType<CharacterAiming>();
         if (characterAimingScript != null)
@@ -56,6 +58,7 @@ public class CharacterLocomotion : MonoBehaviour
         userInput.x = Input.GetAxis("Horizontal");
         userInput.y = Input.GetAxis("Vertical");
         isSprinting = Input.GetKey(KeyCode.LeftShift);
+        Debug.Log(isSprinting);
         animator.SetFloat("InputX", userInput.x);
         animator.SetFloat("InputY", userInput.y);
     }
@@ -93,7 +96,7 @@ public class CharacterLocomotion : MonoBehaviour
 
             if (Time.time - jumpButtonPressTime <= jumpButtonGracePeriod)
             {
-                yForce = Mathf.Sqrt(jumpForce * -3.0f * Physics.gravity.y * gravityMultiplier);
+                yForce = Mathf.Sqrt(jumpSpeed * -3.0f * Physics.gravity.y * gravityMultiplier);
                 isJumping = true;
                 jumpButtonPressTime = null;
                 lastGroundedTime = null;
@@ -113,22 +116,25 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void MoveCharacter()
     {
+        Vector3 movementDirection = new Vector3(userInput.x, 0, userInput.y).normalized;
+
+        moveSpeed = isSprinting ? sprintingSpeed : defaultSpeed;
+
+        movementDirection *= moveSpeed;
+
+
+        // Kiểm tra nếu đang nhảy và có input di chuyển
+        if (movementDirection != Vector3.zero)
+        {
+            // Chuyển hướng nhân vật dựa trên hướng di chuyển
+            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+        }
+
         if (!isGrounded)
         {
-            Vector3 movementDirection = new Vector3(userInput.x, 0, userInput.y).normalized;
-
-            float currentMoveSpeed = isSprinting ? sprintingSpeed : moveSpeed;
-
-            // Kiểm tra nếu đang nhảy và có input di chuyển
-            if (isJumping && movementDirection != Vector3.zero)
-            {
-                // Chuyển hướng nhân vật dựa trên hướng di chuyển
-                Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
-            }
-
             Vector3 forwardDirection = transform.forward;
-            Vector3 velocity = forwardDirection * currentMoveSpeed;
+            Vector3 velocity = forwardDirection * jumpSpeed * moveSpeed;
             velocity.y = yForce;
 
             characterController.Move(velocity * Time.deltaTime);
