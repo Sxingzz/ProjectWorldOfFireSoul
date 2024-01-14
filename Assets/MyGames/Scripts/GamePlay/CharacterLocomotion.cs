@@ -21,7 +21,6 @@ public class CharacterLocomotion : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float sprintingSpeed = 1.5f;
-    [SerializeField] private float jumpForce = 3.0f;
     [SerializeField] private float jumpSpeed = 5f;
     [SerializeField] private float gravityMultiplier = 1.5f;
     [SerializeField] private float jumpButtonGracePeriod = 0.2f;
@@ -116,32 +115,44 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void MoveCharacter()
     {
-        Vector3 movementDirection = new Vector3(userInput.x, 0, userInput.y).normalized;
+            Vector3 movementDirection = new Vector3(userInput.x, 0, userInput.y).normalized;
 
-        moveSpeed = isSprinting ? sprintingSpeed : defaultSpeed;
+            moveSpeed = isSprinting ? sprintingSpeed : defaultSpeed;
 
-        movementDirection *= moveSpeed;
+            // Nếu không phải đang nhảy, đảm bảo di chuyển theo hướng đúng
+            if (!isJumping)
+            {
+                movementDirection = transform.TransformDirection(movementDirection);
+            }
 
+            movementDirection *= moveSpeed;
 
-        // Kiểm tra nếu đang nhảy và có input di chuyển
-        if (movementDirection != Vector3.zero)
-        {
-            // Chuyển hướng nhân vật dựa trên hướng di chuyển
-            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+            // Kiểm tra nếu đang nhảy và có input di chuyển
+            if (movementDirection != Vector3.zero)
+            {
+                // Chuyển hướng nhân vật dựa trên hướng di chuyển
+                Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
+            }
+
+            if (!isGrounded)
+            {
+                Vector3 forwardDirection = transform.forward;
+
+                // Kiểm tra nếu đang nhảy và có input di chuyển về phía sau
+                if (isJumping && userInput.y < 0)
+                {
+                    forwardDirection *= -1f;  // Đảo hướng di chuyển nếu nhảy và ấn lùi
+                }
+
+                Vector3 velocity = forwardDirection * jumpSpeed * moveSpeed;
+                velocity.y = yForce;
+
+                characterController.Move(velocity * Time.deltaTime);
+            }
         }
 
-        if (!isGrounded)
-        {
-            Vector3 forwardDirection = transform.forward;
-            Vector3 velocity = forwardDirection * jumpSpeed * moveSpeed;
-            velocity.y = yForce;
-
-            characterController.Move(velocity * Time.deltaTime);
-        }
-    }
-
-    private void OnAnimatorMove()
+        private void OnAnimatorMove()
     {
         if (isGrounded)
         {
