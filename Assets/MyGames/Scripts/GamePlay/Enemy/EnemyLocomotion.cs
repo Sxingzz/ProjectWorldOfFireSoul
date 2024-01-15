@@ -27,7 +27,7 @@ public class EnemyAITest : MonoBehaviour
         Vector3 movementDirection = navMeshAgent.velocity.normalized;
 
         animator.SetFloat("InputX", movementDirection.x);
-        animator.SetFloat("InputY", movementDirection.y); 
+        animator.SetFloat("InputY", movementDirection.z); 
 
         if (respawnPoints.Length > 0)
         {
