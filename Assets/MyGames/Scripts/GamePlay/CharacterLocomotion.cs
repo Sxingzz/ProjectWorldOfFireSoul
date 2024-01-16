@@ -105,6 +105,7 @@ public class CharacterLocomotion : MonoBehaviour
         {
             characterController.stepOffset = 0;
             isGrounded = false;
+            isJumping = false;
 
             if ((isJumping && yForce < 0) || yForce < -2)
             {
@@ -147,6 +148,11 @@ public class CharacterLocomotion : MonoBehaviour
 
                 Vector3 velocity = forwardDirection * jumpSpeed * moveSpeed;
                 velocity.y = yForce;
+                if (isJumping)
+                {
+                animator.SetTrigger("JumpTrigger");
+                isJumping = false;
+                }
 
                 characterController.Move(velocity * Time.deltaTime);
             }
