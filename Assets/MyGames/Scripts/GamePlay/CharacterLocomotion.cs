@@ -4,172 +4,149 @@ using UnityEngine;
 
 public class CharacterLocomotion : MonoBehaviour
 {
+    public float jumpHeight;
+    public float gravity;
+    public float stepDown;
+    public float airControl;
+    public float jumpDamp;
+    public float groundSpeed;
+    public float pushPower;
+
     private Animator animator;
-    private CharacterController characterController;
     private Vector2 userInput;
+    private CharacterController playerController;
 
-    private bool isSprinting;
+    private Vector3 rootMotion;
+    private Vector3 velocity;
     private bool isJumping;
-    private bool isGrounded;
 
-    private float originalStepOffset;
-    private float yForce;
-    private float? lastGroundedTime;
-    private float? jumpButtonPressTime;
-    private float turnSpeed;
-    private float defaultSpeed;
-
-    [SerializeField] private float moveSpeed = 1f;
-    [SerializeField] private float sprintingSpeed = 1.5f;
-    [SerializeField] private float jumpSpeed = 5f;
-    [SerializeField] private float gravityMultiplier = 1.5f;
-    [SerializeField] private float jumpButtonGracePeriod = 0.2f;
-    
-
+    // Start is called before the first frame update
     void Start()
     {
+        // Get references to components when the script starts
         animator = GetComponent<Animator>();
-        characterController = GetComponent<CharacterController>();
-        originalStepOffset = characterController.stepOffset;
-        defaultSpeed = moveSpeed;
-
-        CharacterAiming characterAimingScript = FindObjectOfType<CharacterAiming>();
-        if (characterAimingScript != null)
-        {
-            turnSpeed = characterAimingScript.turnSpeed;
-        }
-        else
-        {
-            Debug.LogError("Không tìm thấy đối tượng CharacterAiming trong scene.");
-        }
+        playerController = GetComponent<CharacterController>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        HandleInput();
-        ApplyGravity();
-        HandleJump();
-        MoveCharacter();
+        // Get user input and update animation every frame
+        GetInput();
+        UpdateAnimation();
     }
 
-    private void HandleInput()
+    private void GetInput()
     {
+        // Get horizontal and vertical input from the user
         userInput.x = Input.GetAxis("Horizontal");
         userInput.y = Input.GetAxis("Vertical");
-        isSprinting = Input.GetKey(KeyCode.LeftShift);
-        Debug.Log(isSprinting);
+
+        // Check if the space key is pressed to initiate a jump
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
+    }
+
+    private void UpdateAnimation()
+    {
+        // Update animator parameters based on user input
         animator.SetFloat("InputX", userInput.x);
         animator.SetFloat("InputY", userInput.y);
     }
 
-    private void ApplyGravity()
+    private void OnAnimatorMove()
     {
-        float gravity = Physics.gravity.y * gravityMultiplier;
-
-        if (isJumping && yForce > 0 && !Input.GetButton("Jump"))
-        {
-            gravity *= 2;
-        }
-
-        yForce += gravity * Time.deltaTime;
+        // Capture root motion from the animator to handle custom character motion
+        rootMotion += animator.deltaPosition;
     }
 
-    private void HandleJump()
+    private void FixedUpdate()
     {
-        if (characterController.isGrounded)
+        // Depending on the character's state (ground or air), update accordingly
+        if (isJumping) // In Air State
         {
-            lastGroundedTime = Time.time;
+            UpdateInAir();
         }
-
-        if (Input.GetButtonDown("Jump"))
+        else // Ground State
         {
-            jumpButtonPressTime = Time.time;
-        }
-
-        if (Time.time - lastGroundedTime <= jumpButtonGracePeriod)
-        {
-            yForce = -0.5f;
-            characterController.stepOffset = originalStepOffset;
-            isGrounded = true;
-            isJumping = false;
-
-            if (Time.time - jumpButtonPressTime <= jumpButtonGracePeriod)
-            {
-                yForce = Mathf.Sqrt(jumpSpeed * -3.0f * Physics.gravity.y * gravityMultiplier);
-                isJumping = true;
-                jumpButtonPressTime = null;
-                lastGroundedTime = null;
-            }
-        }
-        else
-        {
-            characterController.stepOffset = 0;
-            isGrounded = false;
-            isJumping = false;
-
-            if ((isJumping && yForce < 0) || yForce < -2)
-            {
-                // Xử lý Animation khi đang rơi
-            }
+            UpdateOnGround();
         }
     }
 
-    private void MoveCharacter()
+    private void UpdateOnGround()
     {
-            Vector3 movementDirection = new Vector3(userInput.x, 0, userInput.y).normalized;
+        // Update character position on the ground
+        Vector3 stepForwardAmount = rootMotion * groundSpeed;
+        Vector3 stepDownAmount = Vector3.down * stepDown;
 
-            moveSpeed = isSprinting ? sprintingSpeed : defaultSpeed;
+        // Move the character controller on the ground
+        playerController.Move(stepForwardAmount + stepDownAmount);
+        rootMotion = Vector3.zero;
 
-            // Nếu không phải đang nhảy, đảm bảo di chuyển theo hướng đúng
-            if (!isJumping)
-            {
-                movementDirection = transform.TransformDirection(movementDirection);
-            }
-
-            movementDirection *= moveSpeed;
-
-            // Kiểm tra nếu đang nhảy và có input di chuyển
-            if (movementDirection != Vector3.zero)
-            {
-                // Chuyển hướng nhân vật dựa trên hướng di chuyển
-                Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, turnSpeed * Time.deltaTime);
-            }
-
-            if (!isGrounded)
-            {
-                Vector3 forwardDirection = transform.forward;
-
-                // Kiểm tra nếu đang nhảy và có input di chuyển về phía sau
-                if (isJumping && userInput.y < 0)
-                {
-                    forwardDirection *= -1f;  // Đảo hướng di chuyển nếu nhảy và ấn lùi
-                }
-
-                Vector3 velocity = forwardDirection * jumpSpeed * moveSpeed;
-                velocity.y = yForce;
-                if (isJumping)
-                {
-                animator.SetTrigger("JumpTrigger");
-                isJumping = false;
-                }
-
-                characterController.Move(velocity * Time.deltaTime);
-            }
-        }
-
-        private void OnAnimatorMove()
-    {
-        if (isGrounded)
+        // If not grounded anymore, set in-air velocity to prevent sudden jerks
+        if (!playerController.isGrounded)
         {
-            Vector3 velocity = animator.deltaPosition * moveSpeed;
-            velocity.y = yForce * Time.deltaTime;
-
-            characterController.Move(velocity);
+            SetInAirVelocity(0);
         }
+    }
+
+    private void UpdateInAir()
+    {
+        // Update character position in the air, considering gravity and air control
+        velocity.y -= gravity * Time.fixedDeltaTime;
+        Vector3 displacement = velocity * Time.fixedDeltaTime;
+        displacement += CalculateAirControl();
+        playerController.Move(displacement);
+        isJumping = !playerController.isGrounded;
+        rootMotion = Vector3.zero;
+        animator.SetBool("IsJumping", isJumping);
+    }
+
+    private Vector3 CalculateAirControl()
+    {
+        // Calculate and return the air control based on user input
+        return ((transform.forward * userInput.y) + (transform.right * userInput.x)) * (airControl / 100);
+    }
+
+    private void Jump()
+    {
+        // Execute a jump if not currently jumping
+        if (!isJumping)
+        {
+            float jumpVelocity = Mathf.Sqrt(2 * gravity * jumpHeight);
+            SetInAirVelocity(jumpVelocity);
+        }
+    }
+
+    private void SetInAirVelocity(float jumpVelocity)
+    {
+        // Set the character in an in-air state with a specific velocity
+        isJumping = true;
+        velocity = animator.velocity * jumpDamp * groundSpeed;
+        velocity.y = jumpVelocity;
+        animator.SetBool("IsJumping", true);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // Handle collisions with other colliders
+        Rigidbody body = hit.collider.attachedRigidbody;
+
+        // If no rigidbody or rigidbody is kinematic, return
+        if (body == null || body.isKinematic)
+            return;
+
+        // We don't want to push objects below us
+        if (hit.moveDirection.y < -0.3f)
+            return;
+
+        // Calculate push direction from move direction, push objects to the sides, not up or down
+        Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+
+        // Apply the push to the other collider
+        body.velocity = pushDir * pushPower;
     }
 }
-
-
-
 
