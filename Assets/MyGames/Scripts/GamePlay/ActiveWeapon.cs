@@ -107,7 +107,7 @@ public class ActiveWeapon : MonoBehaviour
 
     private void ToggleActiveWeapon()
     {
-        bool isHolsterd = rigController.GetBool("holster_weapon");
+        bool isHolsterd = rigController.GetBool("Holder_Weapon");
         if (isHolsterd)
         {
             StartCoroutine(ActivateWeapon(activeWeaponIndex));
@@ -144,7 +144,7 @@ public class ActiveWeapon : MonoBehaviour
         var weapon = GetWeapon(index);
         if (weapon != null)
         {
-            rigController.SetBool("holster_weapon", true);
+            rigController.SetBool("Holder_Weapon", true);
             yield return new WaitForSeconds(0.1f);
             do
             {
@@ -158,7 +158,7 @@ public class ActiveWeapon : MonoBehaviour
         var weapon = GetWeapon(index);
         if (weapon != null)
         {
-            rigController.SetBool("holster_weapon", false);
+            rigController.SetBool("Holder_Weapon", false);
             rigController.Play("equip_" + weapon.weaponName);
             yield return new WaitForSeconds(0.1f);
             do
