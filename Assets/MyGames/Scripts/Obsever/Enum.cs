@@ -21,3 +21,18 @@ public enum WeaponSlot
     Primary = 0,
     Secondary = 1
 }
+
+public enum EnemyStateID
+{
+    ChasePlayer,
+    Death,
+    Idle,
+    FindWeapon,
+    AttackPlayer
+}
+
+public enum SocketID
+{
+    Spine,
+    RightHand
+}

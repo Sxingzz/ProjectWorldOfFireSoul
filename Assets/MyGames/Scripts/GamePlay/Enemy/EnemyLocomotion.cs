@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAITest : MonoBehaviour
+public class EnemyLocomotion : MonoBehaviour
 {
-    [SerializeField] private Transform[] respawnPoints;
-    [SerializeField] private Transform playerTF;
-
-    private Animator animator;
     private NavMeshAgent navMeshAgent;
+    private Animator animator;
 
-    private void Awake()
+    private int speedParam = Animator.StringToHash("Speed");
+
+    // Start is called before the first frame update
+    void Start()
     {
-        playerTF = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
     }
@@ -21,41 +20,13 @@ public class EnemyAITest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //navMeshAgent.SetDestination(playerTF.position); // di chuyển tự động tránh các vật thể
-
-        // Lấy hướng di chuyển của Enemy từ NavMeshAgent
-        Vector3 movementDirection = navMeshAgent.velocity.normalized;
-
-        animator.SetFloat("InputX", movementDirection.x);
-        animator.SetFloat("InputY", movementDirection.z); 
-
-        if (respawnPoints.Length > 0)
+        if (navMeshAgent.hasPath)
         {
-            // Kiểm tra xem enemy đã đến gần điểm đến hay chưa
-            if (!navMeshAgent.pathPending && navMeshAgent.remainingDistance < 0.5f)
-            {
-                Transform newDestination = GetRandomRespawnPoint();
-
-                if (newDestination != null)
-                {
-                    navMeshAgent.SetDestination(newDestination.position);
-                }
-            }
-        }
-    }
-    // Hàm lấy một điểm respawn ngẫu nhiên từ mảng
-    Transform GetRandomRespawnPoint()
-    {
-        if (respawnPoints.Length > 0)
-        {
-            int randomIndex = Random.Range(0, respawnPoints.Length);
-            return respawnPoints[randomIndex];
+            animator.SetFloat(speedParam, navMeshAgent.velocity.magnitude);
         }
         else
         {
-            Debug.LogWarning("Không có điểm respawn nào được cấu hình.");
-            return null;
+            animator.SetFloat(speedParam, 0);
         }
     }
-    
 }
