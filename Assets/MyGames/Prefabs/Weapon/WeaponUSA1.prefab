@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7015278391347460319}
   - component: {fileID: 6192706472412807333}
   - component: {fileID: 6141094123323469097}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_Belt_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1324060585234678466}
   - component: {fileID: 1920105000007394540}
   - component: {fileID: 1911399072238723732}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4777,7 +4777,7 @@ GameObject:
   - component: {fileID: 8323434263485299417}
   - component: {fileID: 2524900037843335075}
   - component: {fileID: 2042443970377042776}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MuzzleFlash01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9676,7 +9676,7 @@ GameObject:
   - component: {fileID: 3127706817443306390}
   - component: {fileID: 4135354953553154050}
   - component: {fileID: 541632017538609726}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9788,7 +9788,7 @@ GameObject:
   - component: {fileID: -7876033245397296494}
   - component: {fileID: -9115335261270263373}
   - component: {fileID: -1899150940440551007}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WeaponUSA1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9826,7 +9826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponSlot: 0
-  weaponName: USA1
+  weaponName: usa1
   raycastOrigin: {fileID: 1658061799459591309}
   raycastDestination: {fileID: 0}
   muzzleFlash:
@@ -9843,6 +9843,7 @@ MonoBehaviour:
   ammoCount: 100
   totalAmmo: 100
   magazineSize: 5
+  damageAmount: 10
 --- !u!114 &-9115335261270263373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9855,7 +9856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 253011e2c7cc11c4292e09a63788ce94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
+  characterAiming: {fileID: 0}
   cameraShake: {fileID: 0}
   rigController: {fileID: 0}
   recoilPattern:
@@ -9876,6 +9877,7 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   duration: 0.1
+  recoilModifier: 1
 --- !u!114 &-1899150940440551007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9940,7 +9942,7 @@ GameObject:
   - component: {fileID: 5421129189301707501}
   - component: {fileID: 5216742219074968502}
   - component: {fileID: 3661566065920029010}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_Mag_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10024,7 +10026,7 @@ GameObject:
   - component: {fileID: 3579859680872743440}
   - component: {fileID: 2302464654044932619}
   - component: {fileID: 2659600543272379221}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_Slide_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10105,7 +10107,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3230331017988774322}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10141,7 +10143,7 @@ GameObject:
   - component: {fileID: 3663213511551030251}
   - component: {fileID: 1116004626694456131}
   - component: {fileID: 994362992098149318}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Decal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15048,7 +15050,7 @@ GameObject:
   - component: {fileID: 7047656209902609796}
   - component: {fileID: 977554423962273472}
   - component: {fileID: 3409265817351965529}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_Trigger_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15131,7 +15133,7 @@ GameObject:
   - component: {fileID: 4909272705032786644}
   - component: {fileID: 4432444395176696808}
   - component: {fileID: 3507597037744053912}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FlashHeadon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20029,7 +20031,7 @@ GameObject:
   - component: {fileID: 5175728943469497164}
   - component: {fileID: 1126883519815882821}
   - component: {fileID: 7333362646005796582}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HitEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24870,7 +24872,7 @@ GameObject:
   - component: {fileID: 3579651363795059096}
   - component: {fileID: 8630231799380013174}
   - component: {fileID: 7019955193189288506}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_Stock_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24951,7 +24953,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1658061799459591309}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: RaycastOrigin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24984,7 +24986,7 @@ GameObject:
   - component: {fileID: 4708314160081481154}
   - component: {fileID: 2382171358912308503}
   - component: {fileID: 3560649208631208773}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_Top_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25067,7 +25069,7 @@ GameObject:
   - component: {fileID: 6294299259696976644}
   - component: {fileID: 1268763816326279238}
   - component: {fileID: 7386333458629074626}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SM_Wep_MachineGun_USA_Handle_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25150,7 +25152,7 @@ GameObject:
   - component: {fileID: 8542925613738296722}
   - component: {fileID: 585406513002955504}
   - component: {fileID: 4232818826214454555}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
