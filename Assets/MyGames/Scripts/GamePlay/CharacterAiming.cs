@@ -21,8 +21,8 @@ public class CharacterAiming : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false; //Đặt trạng thái hiển thị con trỏ chuột thành ẩn.
+        Cursor.lockState = CursorLockMode.Locked;//Đặt trạng thái của con trỏ chuột thành "Locked" (bị khóa).
         animator = GetComponent<Animator>();
         activeWeapon = GetComponent<ActiveWeapon>();
     }
