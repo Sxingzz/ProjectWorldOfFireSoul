@@ -9697,7 +9697,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6294299259696976644}
-  - {fileID: 5421129189301707501}
   - {fileID: 3579859680872743440}
   - {fileID: 3579651363795059096}
   - {fileID: 4708314160081481154}
@@ -9788,6 +9787,7 @@ GameObject:
   - component: {fileID: -7876033245397296494}
   - component: {fileID: -9115335261270263373}
   - component: {fileID: -1899150940440551007}
+  - component: {fileID: 9177572675950017982}
   m_Layer: 10
   m_Name: WeaponUSA1
   m_TagString: Untagged
@@ -9809,6 +9809,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4630198840536620177}
+  - {fileID: 5421129189301707501}
   - {fileID: 3230331017988774322}
   - {fileID: 1658061799459591309}
   m_Father: {fileID: 0}
@@ -9828,7 +9829,6 @@ MonoBehaviour:
   weaponSlot: 0
   weaponName: usa1
   raycastOrigin: {fileID: 1658061799459591309}
-  raycastDestination: {fileID: 0}
   muzzleFlash:
   - {fileID: 2524900037843335075}
   - {fileID: 4432444395176696808}
@@ -9839,11 +9839,14 @@ MonoBehaviour:
   bulletSpeed: 1000
   bulletDrop: 300
   weaponRecoil: {fileID: 0}
-  magazine: {fileID: 0}
+  magazine: {fileID: 2851572708442483697}
   ammoCount: 100
   totalAmmo: 100
   magazineSize: 5
   damageAmount: 10
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-9115335261270263373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9860,22 +9863,22 @@ MonoBehaviour:
   cameraShake: {fileID: 0}
   rigController: {fileID: 0}
   recoilPattern:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
+  - {x: 10, y: 10}
+  - {x: 8, y: 10}
+  - {x: 6, y: 10}
+  - {x: 4, y: 10}
+  - {x: 2, y: 10}
+  - {x: 0, y: 10}
+  - {x: -2, y: 10}
+  - {x: -4, y: 10}
+  - {x: -6, y: 10}
+  - {x: -8, y: 10}
+  - {x: -10, y: 10}
+  - {x: -7, y: 10}
+  - {x: -5, y: 10}
+  - {x: -3, y: 10}
+  - {x: -1, y: 10}
+  - {x: 0, y: 10}
   duration: 0.1
   recoilModifier: 1
 --- !u!114 &-1899150940440551007
@@ -9931,6 +9934,27 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!65 &9177572675950017982
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925302713578961956}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.12238772, y: 0.23385341, z: 1.266656}
+  m_Center: {x: -0.00089561194, y: -0.041265287, z: 0.6403895}
 --- !u!1 &2851572708442483697
 GameObject:
   m_ObjectHideFlags: 0
@@ -9943,7 +9967,7 @@ GameObject:
   - component: {fileID: 5216742219074968502}
   - component: {fileID: 3661566065920029010}
   m_Layer: 10
-  m_Name: SM_Wep_MachineGun_USA_Mag_01
+  m_Name: Magazine-usa1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9957,13 +9981,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2851572708442483697}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.265464e-16, y: -0.03333309, z: 0.13465771}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.0010000169, y: -0.12733307, z: 0.55265844}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7015278391347460319}
-  m_Father: {fileID: 4630198840536620177}
+  m_Father: {fileID: 3024062089660999052}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5216742219074968502
 MeshFilter:
@@ -24953,6 +24977,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1658061799459591309}
+  - component: {fileID: 109990727045262099}
   m_Layer: 10
   m_Name: RaycastOrigin
   m_TagString: Untagged
@@ -24975,6 +25000,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3024062089660999052}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &109990727045262099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6769151770847602982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b31c6cc9d66f3054792d25ad0e75b8c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6868695294576597670
 GameObject:
   m_ObjectHideFlags: 0

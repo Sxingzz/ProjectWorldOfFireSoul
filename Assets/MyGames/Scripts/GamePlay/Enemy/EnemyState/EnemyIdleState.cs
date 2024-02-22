@@ -4,24 +4,27 @@ using UnityEngine;
 
 public class EnemyIdleState : EnemyState
 {
-    public EnemyStateID GetID()
+    EnemyStateID EnemyState.GetID()
     {
         return EnemyStateID.Idle;
     }
 
-    public void Enter(EnemyAgent agent)
+    void EnemyState.Enter(EnemyAgent agent)
+    {
+        agent.weapons.DeActiveWeapon();
+        agent.navMeshAgent.ResetPath();
+    }
+
+    void EnemyState.Exit(EnemyAgent agent)
     {
 
     }
 
-    public void Exit(EnemyAgent agent)
+    void EnemyState.Update(EnemyAgent agent)
     {
+        if (agent.playerTransform.GetComponent<Health>().IsDead()) return;
 
-    }
-
-    public void Update(EnemyAgent agent)
-    {
-        Vector3 playerDirection = agent.playerTransform.position - agent.transform.position;
+        Vector3 playerDirection = agent.playerTransform.position - agent.playerTransform.position;
         if (playerDirection.sqrMagnitude > agent.maxSightDistance * agent.maxSightDistance)
         {
             return;
@@ -32,10 +35,9 @@ public class EnemyIdleState : EnemyState
         playerDirection.Normalize();
 
         float dotProduct = Vector3.Dot(playerDirection, agentDirection);
-
         if (dotProduct > 0)
         {
-            agent.stateMachine.ChangeState(EnemyStateID.ChasePlayer);
+            agent.StateMachine.ChangeState(EnemyStateID.ChasePlayer);
         }
     }
 }

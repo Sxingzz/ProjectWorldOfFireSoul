@@ -8,12 +8,12 @@ public class EnemyAttackPlayerState : EnemyState
     {
         return EnemyStateID.AttackPlayer;
     }
-
     public void Enter(EnemyAgent agent)
     {
-        agent.weapons.ActivateWeapon();
+        agent.weapons.ActiveWeapon();
         agent.weapons.SetTarget(agent.playerTransform);
         agent.navMeshAgent.stoppingDistance = 5.0f;
+        agent.weapons.SetFiring(true);
     }
 
     public void Exit(EnemyAgent agent)
@@ -24,5 +24,12 @@ public class EnemyAttackPlayerState : EnemyState
     public void Update(EnemyAgent agent)
     {
         agent.navMeshAgent.destination = agent.playerTransform.position;
+
+        if (agent.playerTransform.GetComponent<Health>().IsDead())
+        {
+            agent.StateMachine.ChangeState(EnemyStateID.Idle);
+        }
     }
+
+
 }

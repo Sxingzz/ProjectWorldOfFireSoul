@@ -8,7 +8,6 @@ public class EnemyFindWeaponState : EnemyState
     {
         return EnemyStateID.FindWeapon;
     }
-
     public void Enter(EnemyAgent agent)
     {
         WeaponPickup pickup = FindClosetWeapon(agent);
@@ -29,7 +28,7 @@ public class EnemyFindWeaponState : EnemyState
     {
         if (agent.weapons.HasWeapon())
         {
-            agent.stateMachine.ChangeState(EnemyStateID.AttackPlayer);
+            agent.StateMachine.ChangeState(EnemyStateID.AttackPlayer);
         }
     }
 
@@ -38,6 +37,7 @@ public class EnemyFindWeaponState : EnemyState
         WeaponPickup[] weapons = Object.FindObjectsOfType<WeaponPickup>();
         WeaponPickup closetWeapon = null;
         float closestDistance = float.MaxValue;
+
         foreach (var weapon in weapons)
         {
             float distanceToWeapon = Vector3.Distance(agent.transform.position, weapon.transform.position);

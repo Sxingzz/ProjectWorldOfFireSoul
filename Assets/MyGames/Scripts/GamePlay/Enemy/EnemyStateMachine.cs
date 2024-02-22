@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,21 +20,19 @@ public class EnemyStateMachine
         int index = (int)state.GetID();
         states[index] = state;
     }
-
     public EnemyState GetState(EnemyStateID stateID)
     {
         int index = (int)stateID;
         return states[index];
     }
-
-    public void Update()
+    public void update()
     {
         GetState(currentState)?.Update(agent);
     }
 
     public void ChangeState(EnemyStateID newState)
     {
-        GetState(currentState)?.Exit(agent);
+        GetState(currentState)?.Exit(agent); // phải Exit State cũ, rồi mới chuyển sang State mới
         currentState = newState;
         GetState(currentState)?.Enter(agent);
     }
