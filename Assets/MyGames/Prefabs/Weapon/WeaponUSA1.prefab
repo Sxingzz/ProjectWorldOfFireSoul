@@ -9808,8 +9808,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4630198840536620177}
   - {fileID: 5421129189301707501}
+  - {fileID: 4630198840536620177}
   - {fileID: 3230331017988774322}
   - {fileID: 1658061799459591309}
   m_Father: {fileID: 0}
@@ -9826,6 +9826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5034e9387af85e44582fe04397263565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equipWeaponBy: 0
   weaponSlot: 0
   weaponName: usa1
   raycastOrigin: {fileID: 1658061799459591309}
@@ -9842,11 +9843,11 @@ MonoBehaviour:
   magazine: {fileID: 2851572708442483697}
   ammoCount: 100
   totalAmmo: 100
-  magazineSize: 5
+  magazineSize: 3
   damageAmount: 10
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2049
 --- !u!114 &-9115335261270263373
 MonoBehaviour:
   m_ObjectHideFlags: 0

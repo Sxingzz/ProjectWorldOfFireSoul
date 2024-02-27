@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using UnityEngine.Rendering;
-using UnityEngine.EventSystems;
 
 public class ActiveWeapon : MonoBehaviour
 {
-    public CharacterAiming characterAiming;
+    public CharacterAiming chacracterAiming;
     public Transform[] weaponSlots;
     public Transform crossHairTarget;
     public Animator rigController;
@@ -18,8 +16,6 @@ public class ActiveWeapon : MonoBehaviour
     private RaycastWeapon[] equippedWeapons = new RaycastWeapon[2];
     private int activeWeaponIndex;
     private bool isHolsterd = false;
-
-    // Start is called before the first frame update
 
     void Start()
     {
@@ -35,9 +31,8 @@ public class ActiveWeapon : MonoBehaviour
     void Update()
     {
         var weapon = GetWeapon(activeWeaponIndex);
-
-        canFire = !isHolsterd && !reloadWeapon.isReloading;
         bool notSprinting = rigController.GetCurrentAnimatorStateInfo(2).shortNameHash == Animator.StringToHash("notSprinting");
+        canFire = !isHolsterd && !reloadWeapon.isReloading;
 
         if (weapon != null)
         {
@@ -46,32 +41,31 @@ public class ActiveWeapon : MonoBehaviour
                 weapon.StartFiring();
             }
 
-            if (weapon.isFiring && notSprinting) // hàm này khi giữ chuột thì nó bắn liên tục
+            if (weapon.isFiring && notSprinting)
             {
                 weapon.UpdateWeapon(Time.deltaTime, crossHairTarget.position);
             }
-            weapon.UpdateBullets(Time.deltaTime);
 
             if (Input.GetButtonUp("Fire1") || !canFire)
             {
                 weapon.StopFiring();
             }
         }
+
         if (Input.GetKeyDown(KeyCode.X))
         {
-            //bool isHostered = rigController.GetBool("hoister_weapon"); // set bien ishostered = true để play animation rút súng
-            //rigController.SetBool("hoister_weapon", !isHostered); // !isHostered set = false để đưa súng về túi
             ToggleActiveWeapon();
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             SetActiveWeapon(WeaponSlot.Primary);
         }
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SetActiveWeapon(WeaponSlot.Secondary);
         }
-
     }
 
     public bool IsFiring()
@@ -95,6 +89,7 @@ public class ActiveWeapon : MonoBehaviour
         {
             return null;
         }
+
         return equippedWeapons[index];
     }
 
@@ -102,25 +97,31 @@ public class ActiveWeapon : MonoBehaviour
     {
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
         var weapon = GetWeapon(weaponSlotIndex);
-
-
+        if (weapon)
+        {
+            Destroy(weapon.gameObject);
+        }
         weapon = newWeapon;
-        weapon.weaponRecoil.characterAiming = characterAiming;
+        weapon.weaponRecoil.characterAiming = chacracterAiming;
         weapon.weaponRecoil.rigController = rigController;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         rigController.Play("equip_" + weapon.weaponName);
-
+        weapon.equipWeaponBy = EquipWeaponBy.Player;
         equippedWeapons[weaponSlotIndex] = weapon;
         activeWeaponIndex = weaponSlotIndex;
 
         SetActiveWeapon(newWeapon.weaponSlot);
 
+        if (ListenerManager.HasInstance)
+        {
+            ListenerManager.Instance.BroadCast(ListenType.UPDATE_AMMO, weapon);
+        }
     }
 
     private void ToggleActiveWeapon()
     {
-        bool isHoslsterd = rigController.GetBool("holster_weapon");
-        if (isHoslsterd)
+        bool isHolsterd = rigController.GetBool("holster_weapon");
+        if (isHolsterd)
         {
             StartCoroutine(ActivateWeapon(activeWeaponIndex));
         }
@@ -150,6 +151,7 @@ public class ActiveWeapon : MonoBehaviour
         yield return StartCoroutine(ActivateWeapon(activateIndex));
         activeWeaponIndex = activateIndex;
     }
+
     private IEnumerator HolsterWeapon(int index)
     {
         isChangingWeapon = true;
@@ -169,6 +171,10 @@ public class ActiveWeapon : MonoBehaviour
 
     private IEnumerator ActivateWeapon(int index)
     {
+        if (AudioManager.HasInstance)
+        {
+            AudioManager.Instance.PlaySE(AUDIO.SE_PISTOLCOCKING);
+        }
         isChangingWeapon = true;
         var weapon = GetWeapon(index);
         if (weapon != null)
@@ -181,6 +187,11 @@ public class ActiveWeapon : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             } while (rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
             isHolsterd = false;
+
+            if (ListenerManager.HasInstance)
+            {
+                ListenerManager.Instance.BroadCast(ListenType.UPDATE_AMMO, weapon);
+            }
         }
         isChangingWeapon = false;
     }
@@ -188,7 +199,6 @@ public class ActiveWeapon : MonoBehaviour
     public void DropWeapon()
     {
         var currentWeapon = GetActiveWeapon();
-
         if (currentWeapon)
         {
             currentWeapon.transform.SetParent(null);
@@ -197,5 +207,4 @@ public class ActiveWeapon : MonoBehaviour
             equippedWeapons[activeWeaponIndex] = null;
         }
     }
-
 }

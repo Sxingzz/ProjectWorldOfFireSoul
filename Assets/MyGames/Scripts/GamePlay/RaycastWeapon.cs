@@ -4,36 +4,24 @@ using UnityEngine;
 
 public class RaycastWeapon : MonoBehaviour
 {
-
+    public EquipWeaponBy equipWeaponBy;
     public WeaponSlot weaponSlot;
     public string weaponName;
     public Transform raycastOrigin;
-
     public ParticleSystem[] muzzleFlash;
     public ParticleSystem hitEffect;
-
-    public TrailRenderer tracerEffect; // hiệu ứng tia đạn
-
+    public TrailRenderer tracerEffect;
     public bool isFiring = false;
-
-    public int fireRate = 25; // 25 bullet per second
-
+    public int fireRate = 25;
     public float bulletSpeed = 1000f;
     public float bulletDrop = 0f;
 
-
-
     private Ray ray;
     private RaycastHit hitInfo;
-
     private float accumulatedTime;
-
-    private float maxLineTime = 3f;
-
+    private float maxLifeTime = 3f;
     public WeaponRecoil weaponRecoil;
-
     public GameObject magazine;
-
     public int ammoCount;
     public int totalAmmo;
     public int magazineSize;
@@ -47,19 +35,23 @@ public class RaycastWeapon : MonoBehaviour
 
     private Vector3 GetPosition(Bullet bullet)
     {
-        // p +  v*t + 0.5*g*t*t
+        //p + v*t + 0.5*g*t*t
         Vector3 gravity = Vector3.down * bulletDrop;
-        return (bullet.initialPosition) + (bullet.initialVelocity * bullet.time) + (0.5f * bullet.time * bullet.time * gravity);
+        return (bullet.initialPosition) //p
+            + (bullet.initialVelocity * bullet.time) //v*t 
+            + (0.5f * bullet.time * bullet.time * gravity); // 0.5*g*t*t
     }
 
     public bool CanReload()
     {
         return ammoCount == 0 && magazineSize > 0;
     }
+
     public bool EmptyAmmo()
     {
         return ammoCount == 0 && magazineSize <= 0;
     }
+
     public void RefillAmmo()
     {
         if (magazineSize > 0)
@@ -67,9 +59,14 @@ public class RaycastWeapon : MonoBehaviour
             magazineSize--;
             ammoCount = totalAmmo;
         }
+
+        if (ListenerManager.HasInstance)
+        {
+            ListenerManager.Instance.BroadCast(ListenType.UPDATE_AMMO, this);
+        }
     }
 
-    public void StartFiring() // hàm này dc gọi khi click chuột bắn
+    public void StartFiring()
     {
         isFiring = true;
 
@@ -77,17 +74,18 @@ public class RaycastWeapon : MonoBehaviour
         {
             accumulatedTime = 0f;
         }
-        weaponRecoil.Reset();
 
+        weaponRecoil.Reset();
     }
 
-    public void UpdateWeapon(float deltaTime, Vector3 target) // giả lập đường cong viên đạn
+    public void UpdateWeapon(float deltaTime, Vector3 target)
     {
         if (isFiring)
         {
-            UpdateFiring(deltaTime, target); // bắn tia raycast ra
+            UpdateFiring(deltaTime, target);
         }
-        UpdateBullets(deltaTime); // bắn tia line khác
+
+        UpdateBullets(deltaTime);
     }
 
     private void UpdateFiring(float deltaTime, Vector3 target)
@@ -101,11 +99,12 @@ public class RaycastWeapon : MonoBehaviour
         }
     }
 
-    public void UpdateBullets(float deltaTime)
+    private void UpdateBullets(float deltaTime)
     {
         SimulateBullets(deltaTime);
         DestroyBullets();
     }
+
     private void SimulateBullets(float deltaTime)
     {
         if (ObjectPool.HasInstance)
@@ -126,13 +125,14 @@ public class RaycastWeapon : MonoBehaviour
         {
             foreach (Bullet bullet in ObjectPool.Instance.pooledObjects)
             {
-                if (bullet.time >= maxLineTime)
+                if (bullet.time >= maxLifeTime)
                 {
                     bullet.Deactive();
                 }
             }
         }
     }
+
     private void RaycastSegment(Vector3 start, Vector3 end, Bullet bullet)
     {
         Vector3 direction = end - start;
@@ -147,13 +147,13 @@ public class RaycastWeapon : MonoBehaviour
             hitEffect.Emit(1);
 
             bullet.tracer.transform.position = hitInfo.point;
-            bullet.time = maxLineTime;
+            bullet.time = maxLifeTime;
             end = hitInfo.point;
 
             var rigidbody = hitInfo.collider.GetComponent<Rigidbody>();
             if (rigidbody)
             {
-                rigidbody.AddForceAtPosition(ray.direction * 5, hitInfo.point, ForceMode.Impulse);
+                rigidbody.AddForceAtPosition(ray.direction * 2, hitInfo.point, ForceMode.Impulse);
             }
 
             var hitBox = hitInfo.collider.GetComponent<HitBox>();
@@ -162,13 +162,12 @@ public class RaycastWeapon : MonoBehaviour
                 hitBox.OnRayCastHit(this, ray.direction);
             }
         }
+
         bullet.tracer.transform.position = end;
     }
 
     private void FireBullet(Vector3 target)
     {
-        print($"Current Ammo: {ammoCount} - Current MagazineSize: {magazineSize}");
-
         if (ammoCount <= 0)
         {
             return;
@@ -176,9 +175,15 @@ public class RaycastWeapon : MonoBehaviour
 
         ammoCount--;
 
+        if (ListenerManager.HasInstance)
+        {
+            ListenerManager.Instance.BroadCast(ListenType.UPDATE_AMMO, this);
+        }
+
         PlayEffect();
 
         Vector3 velocity = (target - raycastOrigin.position).normalized * bulletSpeed;
+
         if (ObjectPool.HasInstance)
         {
             var bullet = ObjectPool.Instance.GetPooledObject();
@@ -189,29 +194,11 @@ public class RaycastWeapon : MonoBehaviour
         {
             weaponRecoil.GenerateRecoil(weaponName);
         }
-
-
-        //ray.origin = raycastOrigin.position;
-        //ray.direction = raycastDestination.position - raycastOrigin.position;
-
-        //var tracer = Instantiate(tracerEffect, ray.origin, Quaternion.identity);
-        //tracer.AddPosition(ray.origin);
-
-        //if (Physics.Raycast(ray, out hitInfo))
-        //{
-        //    //Debug.DrawLine(ray.origin, hitInfo.point, Color.red, 1f);
-        //    hitEffect.transform.position = hitInfo.point;
-        //    hitEffect.transform.forward = hitInfo.normal;
-        //    hitEffect.Emit(1);
-
-        //    tracer.transform.position = hitInfo.point;
-        //}
     }
 
     public void StopFiring()
     {
         isFiring = false;
-
     }
 
     private void PlayEffect()

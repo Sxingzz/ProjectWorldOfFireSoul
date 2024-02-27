@@ -5,13 +5,13 @@ using UnityEngine;
 public class CharacterLocomotion : MonoBehaviour
 {
     public Animator rigController;
-    public float jumpHeight;
-    public float gravity;
-    public float stepDown;
-    public float airControl;
-    public float jumpDamp;
-    public float groundSpeed;
-    public float pushPower;
+    private float jumpHeight;
+    private float gravity;
+    private float stepDown;
+    private float airControl;
+    private float jumpDamp;
+    private float groundSpeed;
+    private float pushPower;
 
     private Animator animator;
     private Vector2 userInput;
@@ -24,6 +24,20 @@ public class CharacterLocomotion : MonoBehaviour
     private bool isJumping;
 
     private int isSprintingParam = Animator.StringToHash("IsSprinting");
+
+    private void Awake()
+    {
+        if (DataManager.HasInstance)
+        {
+            jumpHeight = DataManager.Instance.DataConfig.JumpHeight;
+            gravity = DataManager.Instance.DataConfig.Gravity;
+            stepDown = DataManager.Instance.DataConfig.StepDown;
+            airControl = DataManager.Instance.DataConfig.AirControl;
+            jumpDamp = DataManager.Instance.DataConfig.JumpDamp;
+            groundSpeed = DataManager.Instance.DataConfig.GroundSpeed;
+            pushPower = DataManager.Instance.DataConfig.PushPower;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -141,6 +155,7 @@ public class CharacterLocomotion : MonoBehaviour
         if (!isJumping)
         {
             float jumpVelocity = Mathf.Sqrt(2 * gravity * jumpHeight);
+            //https://thinksleepmake-games.com/2019/12/14/snippets-1-specific-jump-height-in-unity/
             SetInAirVelocity(jumpVelocity);
         }
     }
@@ -153,7 +168,6 @@ public class CharacterLocomotion : MonoBehaviour
         velocity.y = jumpVelocity;
         animator.SetBool("IsJumping", true);
     }
-
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -173,6 +187,22 @@ public class CharacterLocomotion : MonoBehaviour
 
         // Apply the push to the other collider
         body.velocity = pushDir * pushPower;
+    }
+
+    public void OnFootStep()
+    {
+        if (AudioManager.HasInstance)
+        {
+            AudioManager.Instance.PlaySE(AUDIO.SE_FOOTSTEP);
+        }
+    }
+
+    public void OnJump()
+    {
+        if (AudioManager.HasInstance)
+        {
+            AudioManager.Instance.PlaySE(AUDIO.SE_JUMP);
+        }
     }
 }
 

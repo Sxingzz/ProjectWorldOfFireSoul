@@ -4,7 +4,9 @@ public enum ListenType
     LEFT_MOUSE_CLICK,
     RIGHT_MOUSE_CLICK,
     UPDATE_PLAYER_INFO,
-    RELOAD_ANIMATION_EVENT
+    RELOAD_ANIMATION_EVENT,
+    UPDATE_AMMO,
+
 }
 
 public enum UIType
@@ -35,4 +37,10 @@ public enum SocketID
 {
     Spine,
     RightHand
+}
+
+public enum EquipWeaponBy
+{
+    Enemy,
+    Player
 }
