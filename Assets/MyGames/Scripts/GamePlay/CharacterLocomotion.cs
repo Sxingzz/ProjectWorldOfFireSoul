@@ -155,7 +155,6 @@ public class CharacterLocomotion : MonoBehaviour
         if (!isJumping)
         {
             float jumpVelocity = Mathf.Sqrt(2 * gravity * jumpHeight);
-            //https://thinksleepmake-games.com/2019/12/14/snippets-1-specific-jump-height-in-unity/
             SetInAirVelocity(jumpVelocity);
         }
     }
