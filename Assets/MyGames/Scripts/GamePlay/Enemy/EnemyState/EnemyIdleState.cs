@@ -11,7 +11,7 @@ public class EnemyIdleState : EnemyState
 
     void EnemyState.Enter(EnemyAgent agent)
     {
-        agent.weapons.DeActiveWeapon();
+        agent.weapons.DeactivateWeapon();
         agent.navMeshAgent.ResetPath();
     }
 
@@ -37,7 +37,7 @@ public class EnemyIdleState : EnemyState
         float dotProduct = Vector3.Dot(playerDirection, agentDirection);
         if (dotProduct > 0)
         {
-            agent.StateMachine.ChangeState(EnemyStateID.ChasePlayer);
+            agent.stateMachine.ChangeState(EnemyStateID.ChasePlayer);
         }
     }
 }

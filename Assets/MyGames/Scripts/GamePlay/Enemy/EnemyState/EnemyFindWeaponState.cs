@@ -28,7 +28,7 @@ public class EnemyFindWeaponState : EnemyState
     {
         if (agent.weapons.HasWeapon())
         {
-            agent.StateMachine.ChangeState(EnemyStateID.AttackPlayer);
+            agent.stateMachine.ChangeState(EnemyStateID.AttackPlayer);
         }
     }
 

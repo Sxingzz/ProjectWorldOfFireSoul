@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWeapon : MonoBehaviour
+public class EnemyWeapons : MonoBehaviour
 {
-    public float inaccuracy = 0.4f;
+    private float inAccurary;
     private Animator animator;
     private RaycastWeapon currentWeapon;
     private MeshSocketController meshSocketController;
@@ -12,40 +12,54 @@ public class EnemyWeapon : MonoBehaviour
     private Transform currentTarget;
     private bool activeWeapon = false;
 
+    private void Awake()
+    {
+        if (DataManager.HasInstance)
+        {
+            inAccurary = DataManager.Instance.DataConfig.InAccurary;
+        }
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         meshSocketController = GetComponent<MeshSocketController>();
         weaponIK = GetComponent<EnemyWeaponIK>();
     }
+
     private void Update()
     {
         if (currentTarget && currentWeapon && activeWeapon)
         {
             Vector3 target = currentTarget.position + weaponIK.targetOffset;
-            target += Random.insideUnitSphere * inaccuracy;
+            target += Random.insideUnitSphere * inAccurary;
             currentWeapon.UpdateWeapon(Time.deltaTime, target);
         }
     }
 
     public void SetFiring(bool enable)
     {
-        if (enable)
+        if (currentWeapon)
         {
-            currentWeapon.StartFiring();
-        }
-        else
-        {
-            currentWeapon.StopFiring();
+            if (enable)
+            {
+                currentWeapon.StartFiring();
+            }
+            else
+            {
+                currentWeapon.StopFiring();
+            }
         }
     }
+
     public void EquipWeapon(RaycastWeapon weapon)
     {
         currentWeapon = weapon;
+        currentWeapon.equipWeaponBy = EquipWeaponBy.Enemy;
         meshSocketController.Attach(currentWeapon.transform, SocketID.Spine);
     }
 
-    public void ActiveWeapon()
+    public void ActivateWeapon()
     {
         StartCoroutine(EquipWeapon());
     }
@@ -62,7 +76,7 @@ public class EnemyWeapon : MonoBehaviour
         activeWeapon = true;
     }
 
-    public void DeActiveWeapon()
+    public void DeactivateWeapon()
     {
         SetTarget(null);
         SetFiring(false);
@@ -71,19 +85,21 @@ public class EnemyWeapon : MonoBehaviour
 
     private IEnumerator HolsterWeapon()
     {
-        activeWeapon = false;
-        animator.SetBool("Equip", false);
-        yield return new WaitForSeconds(0.5f);
-        while (animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1.0f)
+        if (animator)
         {
-            if (animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= 0.7f)
+            activeWeapon = false;
+            animator.SetBool("Equip", false);
+            yield return new WaitForSeconds(0.5f);
+            while (animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1.0f)
             {
-                meshSocketController.Attach(currentWeapon.transform, SocketID.Spine);
+                if (animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= 0.7f)
+                {
+                    meshSocketController.Attach(currentWeapon.transform, SocketID.Spine);
+                }
+                yield return null;
             }
-            yield return null;
+            weaponIK.SetAimTransform(currentWeapon.raycastOrigin);
         }
-        weaponIK.SetAimTransform(currentWeapon.raycastOrigin);
-
     }
 
     public bool HasWeapon()
@@ -101,7 +117,6 @@ public class EnemyWeapon : MonoBehaviour
 
     public void DropWeapon()
     {
-        // TODO: CALL when AI death
         if (HasWeapon())
         {
             currentWeapon.transform.SetParent(null);
@@ -109,11 +124,15 @@ public class EnemyWeapon : MonoBehaviour
             currentWeapon.gameObject.AddComponent<Rigidbody>();
             currentWeapon = null;
         }
-
     }
+
     public void SetTarget(Transform target)
     {
-        weaponIK.SetTargetTransform(target);
+        if (weaponIK)
+        {
+            weaponIK.SetTargetTransform(target);
+        }
+
         currentTarget = target;
     }
 }

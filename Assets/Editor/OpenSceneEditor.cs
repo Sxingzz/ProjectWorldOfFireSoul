@@ -3,7 +3,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
 public class OpenSceneEditor : EditorWindow {
-   private static string _scenePath = "Assets/MyGame/Scenes/Project/{0}.unity";
+   private static string _scenePath = "Assets/MyGames/Scenes/{0}.unity";
 
    [MenuItem("OpenScene/Loading", false, 1)]
    public static void Menu()

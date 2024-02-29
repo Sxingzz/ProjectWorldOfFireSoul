@@ -5,8 +5,7 @@ using Cinemachine;
 
 public class CharacterAiming : MonoBehaviour
 {
-    public float turnSpeed = 15f;
-    public float aimDuration = 0.3f;
+    private float turnSpeed;
     public AxisState xAxis;
     public AxisState yAxis;
     public Transform cameraLookAt;
@@ -17,12 +16,20 @@ public class CharacterAiming : MonoBehaviour
     private int isAimingParam = Animator.StringToHash("IsAiming");
     private bool isAiming;
 
+    private void Awake()
+    {
+        if (DataManager.HasInstance)
+        {
+            turnSpeed = DataManager.Instance.DataConfig.TurnSpeed;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = Camera.main;
-        Cursor.visible = false; //Đặt trạng thái hiển thị con trỏ chuột thành ẩn.
-        Cursor.lockState = CursorLockMode.Locked;//Đặt trạng thái của con trỏ chuột thành "Locked" (bị khóa).
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         animator = GetComponent<Animator>();
         activeWeapon = GetComponent<ActiveWeapon>();
     }
@@ -36,15 +43,6 @@ public class CharacterAiming : MonoBehaviour
         if (weapon != null)
         {
             weapon.weaponRecoil.recoilModifier = isAiming ? 0.3f : 1.0f;
-
-            //if (isAiming)
-            //{
-            //    weapon.weaponRecoil.recoilModifier = 0.3f;
-            //}
-            //else
-            //{
-            //    weapon.weaponRecoil.recoilModifier = 1f;
-            //}
         }
     }
 

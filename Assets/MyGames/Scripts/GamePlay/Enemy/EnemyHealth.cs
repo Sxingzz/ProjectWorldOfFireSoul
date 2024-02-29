@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : Health
 {
-    public float blinkDuration = 0.1f;
-
-
+    private float blinkDuration;
     private EnemyAgent agent;
     private SkinnedMeshRenderer meshRenderer;
     private EnemyHealthBar healthBar;
@@ -16,18 +14,27 @@ public class EnemyHealth : Health
         agent = GetComponent<EnemyAgent>();
         meshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         healthBar = GetComponentInChildren<EnemyHealthBar>();
+        if (DataManager.HasInstance)
+        {
+            blinkDuration = DataManager.Instance.DataConfig.BlinkDuration;
+            maxHealth = DataManager.Instance.DataConfig.AIMaxHealth;
+            currentHealth = maxHealth;
+        }
     }
-    protected override void OnDamaged(Vector3 direction)
+
+    protected override void OnDamage(Vector3 direction)
     {
         StartCoroutine(EnemyFlash());
         healthBar.SetHealthBarPercentage(currentHealth / maxHealth);
     }
+
     protected override void OnDeath(Vector3 direction)
     {
-        EnemyDeathState deathState = agent.StateMachine.GetState(EnemyStateID.Death) as EnemyDeathState;
+        EnemyDeathState deathState = agent.stateMachine.GetState(EnemyStateID.Death) as EnemyDeathState;
         deathState.direction = direction;
-        agent.StateMachine.ChangeState(EnemyStateID.Death);
+        agent.stateMachine.ChangeState(EnemyStateID.Death);
     }
+
     private IEnumerator EnemyFlash()
     {
         meshRenderer.material.EnableKeyword("_EMISSION");

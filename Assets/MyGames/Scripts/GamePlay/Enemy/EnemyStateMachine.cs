@@ -20,19 +20,21 @@ public class EnemyStateMachine
         int index = (int)state.GetID();
         states[index] = state;
     }
+
     public EnemyState GetState(EnemyStateID stateID)
     {
         int index = (int)stateID;
         return states[index];
     }
-    public void update()
+
+    public void Update()
     {
         GetState(currentState)?.Update(agent);
     }
 
     public void ChangeState(EnemyStateID newState)
     {
-        GetState(currentState)?.Exit(agent); // phải Exit State cũ, rồi mới chuyển sang State mới
+        GetState(currentState)?.Exit(agent);
         currentState = newState;
         GetState(currentState)?.Enter(agent);
     }

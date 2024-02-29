@@ -2,10 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : BaseManager<GameManager>
 {
-    private float notifyLoadingTime = 5f;
+    private float notifyLoadingTime;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        if (DataManager.HasInstance)
+        {
+            notifyLoadingTime = DataManager.Instance.DataConfig.NotifyLoadingTime;
+        }
+    }
 
     void Start()
     {
@@ -24,5 +35,35 @@ public class GameManager : BaseManager<GameManager>
                     });
             }
         }
+    }
+
+    public void RestartGame()
+    {
+        if (UIManager.HasInstance)
+        {
+            OverlapFade overlapFade = UIManager.Instance.GetExistOverlap<OverlapFade>();
+            overlapFade.Show(null);
+            overlapFade.Fade(2f,
+                onDuringFade: () =>
+                {
+                    UIManager.Instance.ShowScreen<ScreenHome>();
+                    LoadScene("Loading");
+                },
+                onFinish: () =>
+                {
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                });
+        }
+
+        if (CameraManager.HasInstance)
+        {
+            CameraManager.Instance.ResetKillCam();
+        }
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 }

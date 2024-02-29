@@ -6,49 +6,51 @@ using UnityEngine.AI;
 public class EnemyAgent : MonoBehaviour
 {
     public Transform playerTransform;
-
-    public EnemyStateMachine StateMachine;
+    public EnemyStateMachine stateMachine;
     public EnemyStateID initState;
     public NavMeshAgent navMeshAgent;
     public Ragdoll ragdoll;
     public EnemyHealthBar UIHealthBar;
-    public EnemyWeapon weapons;
-
-    public float maxTime = 1f;
-    public float maxDistance = 5f;
+    public EnemyWeapons weapons;
+    public float maxTime;
+    public float maxDistance;
     public float dieForce;
-    public float maxSightDistance = 10f;
+    public float maxSightDistance;
 
+    private void Awake()
+    {
+        if (DataManager.HasInstance)
+        {
+            maxTime = DataManager.Instance.DataConfig.MaxTime;
+            maxDistance = DataManager.Instance.DataConfig.MaxDistance;
+            dieForce = DataManager.Instance.DataConfig.DieForce;
+            maxSightDistance = DataManager.Instance.DataConfig.MaxSightDistance;
+        }
+    }
 
-    // Start is called before the first frame update
     void Start()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
         navMeshAgent = GetComponent<NavMeshAgent>();
         ragdoll = GetComponent<Ragdoll>();
         UIHealthBar = GetComponentInChildren<EnemyHealthBar>();
-        weapons = GetComponentInChildren<EnemyWeapon>();
-
+        weapons = GetComponent<EnemyWeapons>();
         navMeshAgent.stoppingDistance = maxDistance;
-        StateMachine = new EnemyStateMachine(this);
-
-        StateMachine.RegisterState(new EnemyChasePlayerState());
-        StateMachine.RegisterState(new EnemyDeathState());
-        StateMachine.RegisterState(new EnemyIdleState());
-        StateMachine.RegisterState(new EnemyFindWeaponState());
-        StateMachine.RegisterState(new EnemyAttackPlayerState());
-
-        StateMachine.ChangeState(initState);
+        stateMachine = new EnemyStateMachine(this);
+        stateMachine.RegisterState(new EnemyChasePlayerState());
+        stateMachine.RegisterState(new EnemyDeathState());
+        stateMachine.RegisterState(new EnemyIdleState());
+        stateMachine.RegisterState(new EnemyFindWeaponState());
+        stateMachine.RegisterState(new EnemyAttackPlayerState());
+        stateMachine.ChangeState(initState);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        StateMachine.update();
+        stateMachine.Update();
     }
 
-    public void DisableAll() // fix lỗi enemy chết bị văng
+    public void DisableAll()
     {
         var allComponents = GetComponents<MonoBehaviour>();
 
