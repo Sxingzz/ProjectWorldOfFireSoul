@@ -29,6 +29,7 @@ public class ScreenHome : BaseScreen
 
     public void OnClickStartButton()
     {
+        Debug.Log("ssss");
         if (UIManager.HasInstance)
         {
             UIManager.Instance.ShowNotify<NotifyLoadingGame>();

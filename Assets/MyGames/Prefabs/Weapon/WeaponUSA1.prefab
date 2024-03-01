@@ -5631,7 +5631,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -9826,7 +9826,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5034e9387af85e44582fe04397263565, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equipWeaponBy: 0
+  equipWeaponBy: 1
   weaponSlot: 0
   weaponName: usa1
   raycastOrigin: {fileID: 1658061799459591309}
@@ -9861,7 +9861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterAiming: {fileID: 0}
-  cameraShake: {fileID: 0}
+  cameraShake: {fileID: -1899150940440551007}
   rigController: {fileID: 0}
   recoilPattern:
   - {x: 10, y: 10}
@@ -11022,7 +11022,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -16012,7 +16012,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -20913,7 +20913,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
