@@ -25,6 +25,14 @@ public class PlayerHealth : Health
             maxHealth = DataManager.Instance.DataConfig.PlayerMaxHealth;
             currentHealth = maxHealth;
         }
+
+        DOVirtual.DelayedCall(2f, () =>
+        {
+            if (ListenerManager.HasInstance)
+            {
+                ListenerManager.Instance.BroadCast(ListenType.UPDATE_HEALTH, this);
+            }
+        });
     }
 
     protected override void OnDamage(Vector3 direction)

@@ -1,17 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PopupQuitGame : BasePopup
 {
-    [SerializeField] private Button buttonYes;
-    [SerializeField] private Button buttonNo;
 
     public override void Init()
     {
         base.Init();
-        buttonYes.onClick.AddListener(OnClickYesButton);
     }
     public override void Show(object data)
     {
@@ -20,10 +18,12 @@ public class PopupQuitGame : BasePopup
     public override void Hide()
     {
         base.Hide();
-        OnClickNoButton();
     }
     public void OnClickYesButton()
     {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#endif
         Application.Quit();
     }
     public void OnClickNoButton()

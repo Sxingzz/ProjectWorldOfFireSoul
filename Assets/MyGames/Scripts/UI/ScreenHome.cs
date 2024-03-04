@@ -41,7 +41,7 @@ public class ScreenHome : BaseScreen
     {
         if (UIManager.HasInstance)
         {
-            UIManager.Instance.ShowPopup<PopupQuitGame>();
+            UIManager.Instance.ShowPopup<PopupQuitGame>(forceShow:true);
         }
 
     }

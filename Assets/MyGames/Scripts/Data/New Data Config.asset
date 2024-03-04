@@ -21,7 +21,7 @@ MonoBehaviour:
   PushPower: 2
   TurnSpeed: 15
   PlayerMaxHealth: 100
-  AIMaxHealth: 100
+  EnemyHealth: 100
   BlinkDuration: 0.1
   MaxTime: 1
   MaxDistance: 5

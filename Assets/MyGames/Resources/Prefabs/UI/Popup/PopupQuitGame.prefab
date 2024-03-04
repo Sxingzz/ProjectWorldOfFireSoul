@@ -89,8 +89,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 800182b85a9a55745ae0b0b4d56721f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonYes: {fileID: 4939375516238719709}
-  buttonNo: {fileID: 6466613725269483697}
 --- !u!1 &1606736178321388805
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,9 +289,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PopupSetting, Assembly-CSharp
-        m_MethodName: OnClickApplyButton
+      - m_Target: {fileID: 4683875084935609831}
+        m_TargetAssemblyTypeName: PopupQuitGame, Assembly-CSharp
+        m_MethodName: OnClickYesButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1957,9 +1955,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PopupSetting, Assembly-CSharp
-        m_MethodName: OnClickCloseButton
+      - m_Target: {fileID: 4683875084935609831}
+        m_TargetAssemblyTypeName: PopupQuitGame, Assembly-CSharp
+        m_MethodName: OnClickNoButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

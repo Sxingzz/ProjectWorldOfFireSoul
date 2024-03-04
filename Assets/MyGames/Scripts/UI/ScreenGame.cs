@@ -70,8 +70,9 @@ public class ScreenGame : BaseScreen
     }
     private void OnUpdateHealth(object value)
     {
-        if (value is Health health)
+        if (value is PlayerHealth health)
         {
+            Debug.Log(health.currentHealth.ToString());
             healthText.text = health.currentHealth.ToString();
             healthImage.fillAmount = health.currentHealth / health.maxHealth;
         }

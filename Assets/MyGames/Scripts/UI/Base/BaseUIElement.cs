@@ -19,6 +19,7 @@ public class BaseUIElement : MonoBehaviour
         if (CanvasGroup != null)
         {
             CanvasGroup.blocksRaycasts = isActive;
+
             CanvasGroup.alpha = isActive ? 1 : 0;
 
             //if (isActive)

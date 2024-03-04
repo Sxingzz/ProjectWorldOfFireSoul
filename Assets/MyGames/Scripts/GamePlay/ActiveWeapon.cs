@@ -20,7 +20,6 @@ public class ActiveWeapon : MonoBehaviour
     void Start()
     {
         reloadWeapon = GetComponent<ReloadWeapon>();
-        weaponSlots = new Transform[3];
         RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
         if (existingWeapon)
         {
