@@ -19,6 +19,7 @@ public class PlayerHealth : Health
         activeWeapon = GetComponent<ActiveWeapon>();
         characterAiming = GetComponent<CharacterAiming>();
         postProcessing = FindObjectOfType<Volume>().profile;
+
         if (DataManager.HasInstance)
         {
             maxHealth = DataManager.Instance.DataConfig.PlayerMaxHealth;
@@ -56,5 +57,19 @@ public class PlayerHealth : Health
                 UIManager.Instance.ShowPopup<PopupMessage>(data: message);
             }
         });
+    }
+
+    protected override void OnHealth(float amount)
+    {
+        if (postProcessing.TryGet(out Vignette vignette))
+        {
+            float percent = 1.0f - (currentHealth / maxHealth);
+            vignette.intensity.value = percent * 0.4f;
+        }
+
+        if (ListenerManager.HasInstance)
+        {
+            ListenerManager.Instance.BroadCast(ListenType.UPDATE_HEALTH, this);
+        }
     }
 }

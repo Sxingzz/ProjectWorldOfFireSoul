@@ -9848,6 +9848,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 2049
+  animator: {fileID: 9100000, guid: a193078e8a9244b429010f3e93841d05, type: 2}
 --- !u!114 &-9115335261270263373
 MonoBehaviour:
   m_ObjectHideFlags: 0

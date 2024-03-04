@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class EnemyDeathState : EnemyState
@@ -17,6 +18,16 @@ public class EnemyDeathState : EnemyState
 
         agent.UIHealthBar.Deactive();
         agent.weapons.DropWeapon();
+        agent.DisableAll();
+
+        DOVirtual.DelayedCall(2f, () =>
+        {
+            if (UIManager.HasInstance)
+            {
+                string message = "Win";
+                UIManager.Instance.ShowPopup<PopupMessage>(data: message);
+            }
+        });
     }
 
     public void Exit(EnemyAgent agent)

@@ -6,6 +6,7 @@ public enum ListenType
     UPDATE_PLAYER_INFO,
     RELOAD_ANIMATION_EVENT,
     UPDATE_AMMO,
+    UPDATE_HEALTH,
 
 }
 
@@ -21,7 +22,8 @@ public enum UIType
 public enum WeaponSlot
 {
     Primary = 0,
-    Secondary = 1
+    Secondary = 1,
+    Third = 2,
 }
 
 public enum EnemyStateID

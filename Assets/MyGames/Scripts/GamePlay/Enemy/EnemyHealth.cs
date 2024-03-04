@@ -17,7 +17,7 @@ public class EnemyHealth : Health
         if (DataManager.HasInstance)
         {
             blinkDuration = DataManager.Instance.DataConfig.BlinkDuration;
-            maxHealth = DataManager.Instance.DataConfig.AIMaxHealth;
+            maxHealth = DataManager.Instance.DataConfig.EnemyHealth;
             currentHealth = maxHealth;
         }
     }

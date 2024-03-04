@@ -65,6 +65,7 @@ public class NotifyLoading : BaseNotify
         seq.OnComplete(() =>
         {
             OnComplete?.Invoke();
+            AudioManager.Instance.PlayBGM(AUDIO.BGM_BLUE_BIRD);
         });
     }
 }

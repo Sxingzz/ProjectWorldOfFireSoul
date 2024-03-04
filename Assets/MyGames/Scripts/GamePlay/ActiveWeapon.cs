@@ -13,13 +13,14 @@ public class ActiveWeapon : MonoBehaviour
     public bool isChangingWeapon;
     public bool canFire;
 
-    private RaycastWeapon[] equippedWeapons = new RaycastWeapon[2];
+    private RaycastWeapon[] equippedWeapons = new RaycastWeapon[3];
     private int activeWeaponIndex;
     private bool isHolsterd = false;
 
     void Start()
     {
         reloadWeapon = GetComponent<ReloadWeapon>();
+        weaponSlots = new Transform[3];
         RaycastWeapon existingWeapon = GetComponentInChildren<RaycastWeapon>();
         if (existingWeapon)
         {
@@ -43,7 +44,6 @@ public class ActiveWeapon : MonoBehaviour
 
             if (weapon.isFiring && notSprinting)
             {
-                Debug.Log("ss");
                 weapon.UpdateWeapon(Time.deltaTime, crossHairTarget.position);
             }
 
@@ -66,6 +66,11 @@ public class ActiveWeapon : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SetActiveWeapon(WeaponSlot.Secondary);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SetActiveWeapon(WeaponSlot.Third);
         }
     }
 
@@ -97,26 +102,30 @@ public class ActiveWeapon : MonoBehaviour
     public void Equip(RaycastWeapon newWeapon)
     {
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
-        var weapon = GetWeapon(weaponSlotIndex);
-        if (weapon)
+        if (equippedWeapons[weaponSlotIndex] == null)
         {
-            Destroy(weapon.gameObject);
-        }
-        weapon = newWeapon;
-        weapon.weaponRecoil.characterAiming = chacracterAiming;
-        weapon.weaponRecoil.rigController = rigController;
-        weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
-        rigController.Play("equip_" + weapon.weaponName);
-        weapon.equipWeaponBy = EquipWeaponBy.Player;
-        equippedWeapons[weaponSlotIndex] = weapon;
-        activeWeaponIndex = weaponSlotIndex;
+            var weapon = GetWeapon(weaponSlotIndex);
+            if (weapon)
+            {
+                Destroy(weapon.gameObject);
+            }
+            weapon = newWeapon;
+            weapon.weaponRecoil.characterAiming = chacracterAiming;
+            weapon.weaponRecoil.rigController = rigController;
+            weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
+            rigController.Play("equip_" + weapon.weaponName);
+            weapon.equipWeaponBy = EquipWeaponBy.Player;
+            equippedWeapons[weaponSlotIndex] = weapon;
+            activeWeaponIndex = weaponSlotIndex;
 
-        SetActiveWeapon(newWeapon.weaponSlot);
+            SetActiveWeapon(newWeapon.weaponSlot);
 
-        if (ListenerManager.HasInstance)
-        {
-            ListenerManager.Instance.BroadCast(ListenType.UPDATE_AMMO, weapon);
+            if (ListenerManager.HasInstance)
+            {
+                ListenerManager.Instance.BroadCast(ListenType.UPDATE_AMMO, weapon);
+            }
         }
+        
     }
 
     private void ToggleActiveWeapon()
@@ -206,6 +215,19 @@ public class ActiveWeapon : MonoBehaviour
             currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
             currentWeapon.gameObject.AddComponent<Rigidbody>();
             equippedWeapons[activeWeaponIndex] = null;
+        }
+    }
+
+    public void RefillMagazine(int size)
+    {
+        var weapon = GetActiveWeapon();
+        if (weapon)
+        {
+            weapon.magazineSize += size;
+            if (ListenerManager.HasInstance)
+            {
+                ListenerManager.Instance.BroadCast(ListenType.UPDATE_AMMO, weapon);
+            }
         }
     }
 }

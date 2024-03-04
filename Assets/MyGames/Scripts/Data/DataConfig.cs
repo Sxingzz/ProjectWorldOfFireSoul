@@ -21,7 +21,7 @@ public class DataConfig : ScriptableObject
 
     [Header("Enemy")]
     //Health
-    public float AIMaxHealth;
+    public float EnemyHealth;
     public float BlinkDuration = 0.1f;
     //AiAgent
     public float MaxTime = 1f;

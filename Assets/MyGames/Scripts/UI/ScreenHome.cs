@@ -29,12 +29,20 @@ public class ScreenHome : BaseScreen
 
     public void OnClickStartButton()
     {
-        Debug.Log("ssss");
         if (UIManager.HasInstance)
         {
             UIManager.Instance.ShowNotify<NotifyLoadingGame>();
         }
 
         Hide();
+    }
+
+    public void OnClickQuitButton()
+    {
+        if (UIManager.HasInstance)
+        {
+            UIManager.Instance.ShowPopup<PopupQuitGame>();
+        }
+
     }
 }

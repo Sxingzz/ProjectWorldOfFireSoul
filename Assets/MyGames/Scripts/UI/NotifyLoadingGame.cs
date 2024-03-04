@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class NotifyLoadingGame : BaseNotify
 {
@@ -20,6 +21,8 @@ public class NotifyLoadingGame : BaseNotify
     public override void Show(object data)
     {
         base.Show(data);
+        StopAllCoroutines();
+        StartCoroutine(LoadScene());
     }
 
     public override void Hide()
@@ -38,14 +41,36 @@ public class NotifyLoadingGame : BaseNotify
             loadingPercentText.SetText($"LOADING SCENES: {asyncOperation.progress * 100}%");
             if (asyncOperation.progress >= 0.9f)
             {
-                loadingSlider.value = 1f;
-                loadingPercentText.SetText($"LOADING SCENES: {loadingSlider.value * 100}%");
+                if (AudioManager.HasInstance)
+                {
+                    AudioManager.Instance.FadeOutBGM();
+                }
+
                 if (UIManager.HasInstance)
                 {
                     UIManager.Instance.ShowOverlap<OverlapFade>();
+                    loadingSlider.value = 1f;
+                    yield return new WaitForSeconds(5f);
+                    loadingPercentText.SetText($"LOADING SCENES: {loadingSlider.value * 100}%");
+                    OverlapFade overlapFade = UIManager.Instance.GetExistOverlap<OverlapFade>();
+                    if (overlapFade != null)
+                    {
+                        overlapFade.Fade(1f,
+                            onDuringFade: () =>
+                            {
+                                asyncOperation.allowSceneActivation = true;
+                            },
+                            onFinish: () =>
+                            {
+                                UIManager.Instance.ShowScreen<ScreenGame>();
+                                if (AudioManager.HasInstance)
+                                {
+                                    AudioManager.Instance.PlayBGM(AUDIO.BGM_SNIPER3D);
+                                }
+                            });
+                    }
                 }
                 yield return new WaitForSeconds(1f);
-                asyncOperation.allowSceneActivation = true;
                 this.Hide();
             }
             yield return null;
