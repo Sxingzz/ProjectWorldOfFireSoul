@@ -50,7 +50,7 @@ public class NotifyLoadingGame : BaseNotify
                 {
                     UIManager.Instance.ShowOverlap<OverlapFade>();
                     loadingSlider.value = 1f;
-                    yield return new WaitForSeconds(5f);
+                    yield return new WaitForSeconds(2f);
                     loadingPercentText.SetText($"LOADING SCENES: {loadingSlider.value * 100}%");
                     OverlapFade overlapFade = UIManager.Instance.GetExistOverlap<OverlapFade>();
                     if (overlapFade != null)

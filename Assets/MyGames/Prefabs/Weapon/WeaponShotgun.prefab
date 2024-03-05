@@ -4918,10 +4918,10 @@ GameObject:
   - component: {fileID: 8926329461367694663}
   - component: {fileID: 6146196459295312062}
   - component: {fileID: 6492940652321345478}
-  - component: {fileID: 4712419664279886429}
   - component: {fileID: 2275123803818246528}
   - component: {fileID: 7914703982774982837}
   - component: {fileID: 8657948165260591950}
+  - component: {fileID: 6064918460485310916}
   m_Layer: 10
   m_Name: WeaponShotgun
   m_TagString: Untagged
@@ -4998,28 +4998,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4712419664279886429
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3909943165932608144}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43202880598511080, guid: 95b9ca638c4d34346847721673f0e494, type: 2}
 --- !u!114 &2275123803818246528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5048,7 +5026,7 @@ MonoBehaviour:
   weaponRecoil: {fileID: 0}
   magazine: {fileID: 5517311126923338689}
   ammoCount: 1
-  totalAmmo: 1
+  totalAmmo: 10
   magazineSize: 2
   damageAmount: 50
   layerMask:
@@ -5128,6 +5106,27 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!65 &6064918460485310916
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3909943165932608144}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.07231602, y: 0.22022918, z: 1.2596703}
+  m_Center: {x: 0, y: 0.014659423, z: 0.24828081}
 --- !u!1 &5415982922182255078
 GameObject:
   m_ObjectHideFlags: 0

@@ -78,4 +78,15 @@ public class ScreenGame : BaseScreen
         }
     }
 
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus && Input.GetKey(KeyCode.Escape))
+        {
+            if (UIManager.HasInstance)
+            {
+                UIManager.Instance.ShowPopup<PopupBackToMenu>();
+            }
+        }
+    }
+
 }

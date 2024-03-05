@@ -71,6 +71,11 @@ public class ActiveWeapon : MonoBehaviour
         {
             SetActiveWeapon(WeaponSlot.Third);
         }
+
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            DropWeapon();
+        }
     }
 
     public bool IsFiring()
@@ -214,6 +219,7 @@ public class ActiveWeapon : MonoBehaviour
             currentWeapon.gameObject.GetComponent<BoxCollider>().enabled = true;
             currentWeapon.gameObject.AddComponent<Rigidbody>();
             equippedWeapons[activeWeaponIndex] = null;
+            rigController.SetBool("holster_weapon", true);
         }
     }
 
