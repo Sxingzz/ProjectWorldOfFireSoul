@@ -77,16 +77,24 @@ public class ScreenGame : BaseScreen
             healthImage.fillAmount = health.currentHealth / health.maxHealth;
         }
     }
-
-    private void OnApplicationFocus(bool hasFocus)
+    private void Update()
     {
-        if (!hasFocus && Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape))
         {
             if (UIManager.HasInstance)
             {
-                UIManager.Instance.ShowPopup<PopupBackToMenu>();
+                UIManager.Instance.ShowPopup<PopupPause>();
+
+                Time.timeScale = 0f;
+
+                if (Cursor.visible)
+                {
+                    Cursor.visible = true;
+                }
+                
             }
         }
+
     }
 
 }

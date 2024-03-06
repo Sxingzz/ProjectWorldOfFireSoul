@@ -28,14 +28,27 @@ public class CharacterAiming : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+
+        
+
         animator = GetComponent<Animator>();
         activeWeapon = GetComponent<ActiveWeapon>();
     }
 
     private void Update()
     {
+        // && UIManager.Instance.CurPopup.GetType() == typeof(PopupPause)
+        if (UIManager.HasInstance && UIManager.Instance.CurPopup != null )
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         isAiming = Input.GetMouseButton(1);
         animator.SetBool(isAimingParam, isAiming);
 

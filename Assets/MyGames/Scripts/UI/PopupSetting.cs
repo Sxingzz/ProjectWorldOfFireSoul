@@ -48,6 +48,7 @@ public class PopupSetting : BasePopup
     public void OnClickCloseButton()
     {
         Hide();
+        Time.timeScale = 1f;
     }
 
     public void OnBGMValueChange(float v)

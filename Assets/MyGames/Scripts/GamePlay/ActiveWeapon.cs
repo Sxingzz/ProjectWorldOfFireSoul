@@ -164,6 +164,7 @@ public class ActiveWeapon : MonoBehaviour
         yield return StartCoroutine(HolsterWeapon(holsterIndex));
         yield return StartCoroutine(ActivateWeapon(activateIndex));
         activeWeaponIndex = activateIndex;
+        Debug.Log("activeWeaponIndex:" + activeWeaponIndex);
     }
 
     private IEnumerator HolsterWeapon(int index)
@@ -178,7 +179,7 @@ public class ActiveWeapon : MonoBehaviour
             do
             {
                 yield return new WaitForEndOfFrame();
-            } while (rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            } while (rigController.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
         }
         isChangingWeapon = false;
     }
@@ -199,7 +200,7 @@ public class ActiveWeapon : MonoBehaviour
             do
             {
                 yield return new WaitForEndOfFrame();
-            } while (rigController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            } while (rigController.GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f);
             isHolsterd = false;
 
             if (ListenerManager.HasInstance)

@@ -54,6 +54,7 @@ public class GameManager : BaseManager<GameManager>
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
                 });
+            Debug.Log("sss");
         }
 
         if (CameraManager.HasInstance)
