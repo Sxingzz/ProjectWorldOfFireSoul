@@ -42,8 +42,9 @@ public class PopupPause : BasePopup
 
     public void OnClickBackButton()
     {
+        Time.timeScale = 1f;
         Hide();
-
+        
 
     }
 
