@@ -86,12 +86,6 @@ public class ScreenGame : BaseScreen
                 UIManager.Instance.ShowPopup<PopupPause>();
 
                 Time.timeScale = 0f;
-
-                if (Cursor.visible)
-                {
-                    Cursor.visible = true;
-                }
-                
             }
         }
 

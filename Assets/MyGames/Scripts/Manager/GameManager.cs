@@ -1,3 +1,4 @@
+﻿using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -54,7 +55,6 @@ public class GameManager : BaseManager<GameManager>
                     Cursor.visible = true;
                     Cursor.lockState = CursorLockMode.None;
                 });
-            Debug.Log("sss");
         }
 
         if (CameraManager.HasInstance)
@@ -67,4 +67,7 @@ public class GameManager : BaseManager<GameManager>
     {
         SceneManager.LoadScene(sceneName);
     }
+
+
+
 }

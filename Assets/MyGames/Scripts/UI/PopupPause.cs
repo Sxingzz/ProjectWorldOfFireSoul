@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PopupPause : BasePopup
 {
@@ -12,11 +13,16 @@ public class PopupPause : BasePopup
     public override void Show(object data)
     {
         base.Show(data);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public override void Hide()
     {
         base.Hide();
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void OnClickBackToMenuButton()
@@ -44,7 +50,6 @@ public class PopupPause : BasePopup
     {
         Time.timeScale = 1f;
         Hide();
-        
 
     }
 

@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 public class EnemyAgent : MonoBehaviour
 {
@@ -17,8 +19,15 @@ public class EnemyAgent : MonoBehaviour
     public float dieForce;
     public float maxSightDistance;
 
+    public float detectionRange = 10f;
+
+    public static int aliveEnemyCount = 0;
+
+
     private void Awake()
     {
+        aliveEnemyCount = 0;
+
         if (DataManager.HasInstance)
         {
             maxTime = DataManager.Instance.DataConfig.MaxTime;
@@ -30,6 +39,9 @@ public class EnemyAgent : MonoBehaviour
 
     void Start()
     {
+        aliveEnemyCount++;
+        Debug.Log("alive "+ aliveEnemyCount);
+
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
         ragdoll = GetComponent<Ragdoll>();
@@ -48,6 +60,8 @@ public class EnemyAgent : MonoBehaviour
     void Update()
     {
         stateMachine.Update();
+        EnemyController();
+
     }
 
     public void DisableAll()
@@ -61,4 +75,29 @@ public class EnemyAgent : MonoBehaviour
 
         navMeshAgent.enabled = false;
     }
+
+    public void EnemyController()
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (stateMachine.currentState != EnemyStateID.AttackPlayer)
+        {
+            if (distanceToPlayer <= detectionRange)
+            {
+                stateMachine.ChangeState(EnemyStateID.FindWeapon);
+            }
+            else
+            {
+                stateMachine.currentState = EnemyStateID.Idle;
+            }
+        }
+
+        if (stateMachine.currentState == EnemyStateID.ChasePlayer && distanceToPlayer <= 5f)
+        {
+            stateMachine.ChangeState(EnemyStateID.AttackPlayer);
+        }
+    }
+
+
+
 }

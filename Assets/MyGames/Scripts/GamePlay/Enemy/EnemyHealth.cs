@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,6 +33,16 @@ public class EnemyHealth : Health
         EnemyDeathState deathState = agent.stateMachine.GetState(EnemyStateID.Death) as EnemyDeathState;
         deathState.direction = direction;
         agent.stateMachine.ChangeState(EnemyStateID.Death);
+
+        if (EnemyAgent.aliveEnemyCount > 0)
+        {
+            EnemyAgent.aliveEnemyCount--; 
+        }
+        if (EnemyAgent.aliveEnemyCount < 0)
+        {
+            EnemyAgent.aliveEnemyCount = 0;
+        }
+
     }
 
     private IEnumerator EnemyFlash()

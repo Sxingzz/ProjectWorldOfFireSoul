@@ -9844,7 +9844,7 @@ MonoBehaviour:
   ammoCount: 100
   totalAmmo: 100
   magazineSize: 3
-  damageAmount: 10
+  damageAmount: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 2049
