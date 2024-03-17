@@ -7,6 +7,10 @@ public enum ListenType
     RELOAD_ANIMATION_EVENT,
     UPDATE_AMMO,
     UPDATE_HEALTH,
+    UPDATE_ENEMY_COUNT,
+    UPDATE_QUEST_TEXT,
+    UPDATE_TASK_COMPLETE,
+    UPDATE_RECEIVE_TASK,
 
 }
 
@@ -32,7 +36,8 @@ public enum EnemyStateID
     Death,
     Idle,
     FindWeapon,
-    AttackPlayer
+    AttackPlayer,
+    Patrol,
 }
 
 public enum SocketID
@@ -45,4 +50,11 @@ public enum EquipWeaponBy
 {
     Enemy,
     Player
+}
+
+public enum QuestStatus
+{
+    NotStarted,
+    InProgress,
+    Completed
 }

@@ -20,11 +20,14 @@ public class PopupSetting : BasePopup
     {
         base.Show(data);
         OnInit();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public override void Hide()
     {
         base.Hide();
+        
     }
 
     public void OnClickApplyButton()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealthPickup : MonoBehaviour
 {
-    public float amountHealthPickup = 50f;
+    public float amountHealthPickup = 100f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -13,6 +13,11 @@ public class HealthPickup : MonoBehaviour
         {
             health.TakeHealth(amountHealthPickup);
             Destroy(this.gameObject);
+        }
+
+        if (AudioManager.HasInstance)
+        {
+            AudioManager.Instance.PlaySE(AUDIO.SE_ITEMPICKUP);
         }
     }
 }

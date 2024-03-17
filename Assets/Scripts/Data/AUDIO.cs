@@ -6,6 +6,7 @@
 	  public const string BGM_BMG_4 = "bmg_4";
 	  public const string BGM_BLUE_BIRD = "BlueBird_BGM";
 	  public const string BGM_SNIPER3D = "Sniper3D_BGM";
+	  public const string BGM_DRAMACIC = "PursuitDramatic_BGM";
 
 
       public const string SE_ACTIVEWEAPON = "ActiveWeapon";
@@ -25,4 +26,10 @@
 	  public const string SE_TAKEOUTMAGAZINE = "TakeOutMagazine";
 	  public const string SE_M16A4 = "M16A4_SE";
 	  public const string SE_PISTOL = "Pistol_SE";
+	  public const string SE_SHOTGUN = "Shotgun_SE";
+      public const string SE_MISSINGCOMPLETE = "MissionCompleted_SE";
+      public const string SE_APPROVEDMISSION = "ApprovedMission_SE";
+	  public const string SE_CLICK = "Click_SE";
+	  public const string SE_ITEMPICKUP = "ItemPickup_SE";
+
 }

@@ -10,12 +10,18 @@ public class WeaponPickup : MonoBehaviour
     {
         //Player
         ActiveWeapon activeWeapon = other.gameObject.GetComponent<ActiveWeapon>();
+        
         if (activeWeapon != null)
         {
             RaycastWeapon newWeapon = Instantiate(weaponPrefab);
             activeWeapon.Equip(newWeapon);
+            if (AudioManager.HasInstance)
+            {
+                AudioManager.Instance.PlaySE(AUDIO.SE_ITEMPICKUP);
+            }
             Destroy(gameObject);
         }
+        
 
         //Enemy
         EnemyWeapons enemyWeapons = other.gameObject.GetComponent<EnemyWeapons>();

@@ -20,16 +20,16 @@ MonoBehaviour:
   GroundSpeed: 1.2
   PushPower: 2
   TurnSpeed: 15
-  PlayerMaxHealth: 100
+  PlayerMaxHealth: 500
   EnemyHealth: 100
   BlinkDuration: 0.1
   MaxTime: 1
-  MaxDistance: 5
+  MaxDistance: 20
   DieForce: 10
-  MaxSightDistance: 10
+  MaxSightDistance: 20
   InAccurary: 0.4
   AngleLimit: 90
-  DistanceLimit: 1.5
+  DistanceLimit: 5
   NotifyLoadingTime: 3
   BounceSpeed: 8
   BounceAmplitude: 0.05

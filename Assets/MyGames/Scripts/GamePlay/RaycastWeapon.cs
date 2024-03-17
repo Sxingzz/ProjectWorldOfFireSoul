@@ -110,7 +110,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if (ObjectPool.HasInstance)
         {
-            ObjectPool.Instance.pooledObjects.ForEach(bullet =>
+            ObjectPool.Instance.PlayerPooledObjects.ForEach(bullet =>
             {
                 Vector3 p0 = GetPosition(bullet);
                 bullet.time += deltaTime;
@@ -124,7 +124,7 @@ public class RaycastWeapon : MonoBehaviour
     {
         if (ObjectPool.HasInstance)
         {
-            foreach (Bullet bullet in ObjectPool.Instance.pooledObjects)
+            foreach (Bullet bullet in ObjectPool.Instance.PlayerPooledObjects)
             {
                 if (bullet.time >= maxLifeTime)
                 {

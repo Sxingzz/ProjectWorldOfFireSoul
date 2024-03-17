@@ -23,14 +23,14 @@ public class DataConfig : ScriptableObject
     //Health
     public float EnemyHealth;
     public float BlinkDuration = 0.1f;
-    //AiAgent
+    //EnemyAgent
     public float MaxTime = 1f;
     public float MaxDistance = 5f;
     public float DieForce = 10f;
     public float MaxSightDistance = 10f;
-    //AiWeapons
+    //EnemyWeapons
     public float InAccurary = 0.4f;
-    //AiWeaponIK
+    //EnemyWeaponIK
     public float AngleLimit = 90f;
     public float DistanceLimit = 1.5f;
 

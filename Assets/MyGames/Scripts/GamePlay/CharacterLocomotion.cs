@@ -39,20 +39,19 @@ public class CharacterLocomotion : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        // Get references to components when the script starts
+        
         animator = GetComponent<Animator>();
         playerController = GetComponent<CharacterController>();
         activeWeapon = GetComponent<ActiveWeapon>();
         reloadWeapon = GetComponent<ReloadWeapon>();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        // Get user input and update animation every frame
+        
         GetInput();
         UpdateAnimation();
 
@@ -60,11 +59,9 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void GetInput()
     {
-        // Get horizontal and vertical input from the user
         userInput.x = Input.GetAxis("Horizontal");
         userInput.y = Input.GetAxis("Vertical");
 
-        // Check if the space key is pressed to initiate a jump
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
@@ -91,20 +88,20 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void UpdateAnimation()
     {
-        // Update animator parameters based on user input
+       
         animator.SetFloat("InputX", userInput.x);
         animator.SetFloat("InputY", userInput.y);
     }
 
     private void OnAnimatorMove()
     {
-        // Capture root motion from the animator to handle custom character motion
+        
         rootMotion += animator.deltaPosition;
     }
 
     private void FixedUpdate()
     {
-        // Depending on the character's state (ground or air), update accordingly
+        
         if (isJumping) // In Air State
         {
             UpdateInAir();
@@ -117,14 +114,14 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void UpdateOnGround()
     {
-        // Update character position on the ground
+       
         Vector3 stepForwardAmount = rootMotion * groundSpeed;
         Vector3 stepDownAmount = Vector3.down * stepDown;
-        // Move the character controller on the ground
+        
         playerController.Move(stepForwardAmount + stepDownAmount);
         rootMotion = Vector3.zero;
 
-        // If not grounded anymore, set in-air velocity to prevent sudden jerks
+        
         if (!playerController.isGrounded)
         {
             SetInAirVelocity(0);
@@ -133,7 +130,7 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void UpdateInAir()
     {
-        // Update character position in the air, considering gravity and air control
+        
         velocity.y -= gravity * Time.fixedDeltaTime;
         Vector3 displacement = velocity * Time.fixedDeltaTime;
         displacement += CalculateAirControl();
@@ -145,13 +142,13 @@ public class CharacterLocomotion : MonoBehaviour
 
     private Vector3 CalculateAirControl()
     {
-        // Calculate and return the air control based on user input
+        
         return ((transform.forward * userInput.y) + (transform.right * userInput.x)) * (airControl / 100);
     }
 
     private void Jump()
     {
-        // Execute a jump if not currently jumping
+        
         if (!isJumping)
         {
             float jumpVelocity = Mathf.Sqrt(2 * gravity * jumpHeight);
@@ -161,7 +158,7 @@ public class CharacterLocomotion : MonoBehaviour
 
     private void SetInAirVelocity(float jumpVelocity)
     {
-        // Set the character in an in-air state with a specific velocity
+        
         isJumping = true;
         velocity = animator.velocity * jumpDamp * groundSpeed;
         velocity.y = jumpVelocity;
@@ -170,21 +167,21 @@ public class CharacterLocomotion : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        // Handle collisions with other colliders
+        
         Rigidbody body = hit.collider.attachedRigidbody;
 
-        // If no rigidbody or rigidbody is kinematic, return
+        
         if (body == null || body.isKinematic)
             return;
 
-        // We don't want to push objects below us
+        
         if (hit.moveDirection.y < -0.3f)
             return;
 
-        // Calculate push direction from move direction, push objects to the sides, not up or down
+       
         Vector3 pushDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
 
-        // Apply the push to the other collider
+       
         body.velocity = pushDir * pushPower;
     }
 

@@ -95,11 +95,21 @@ public class EnemyWeapons : MonoBehaviour
             {
                 if (animator.GetCurrentAnimatorStateInfo(1).normalizedTime >= 0.7f)
                 {
-                    meshSocketController.Attach(currentWeapon.transform, SocketID.Spine);
+                    if (currentWeapon)
+                    {
+                        meshSocketController.Attach(currentWeapon.transform, SocketID.Spine);
+                    }
+                    
                 }
                 yield return null;
             }
-            weaponIK.SetAimTransform(currentWeapon.raycastOrigin);
+            if (currentWeapon)
+            {
+                weaponIK.SetAimTransform(currentWeapon.raycastOrigin);
+            }
+                
+            
+           
         }
     }
 

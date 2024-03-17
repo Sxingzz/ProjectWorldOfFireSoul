@@ -32,4 +32,12 @@ public class WeaponAnimationEvent : MonoBehaviour
             AudioManager.Instance.PlaySE(AUDIO.SE_PISTOL);
         }
     }
+
+    public void AudioOnShootShotgun()
+    {
+        if (AudioManager.HasInstance)
+        {
+            AudioManager.Instance.PlaySE(AUDIO.SE_SHOTGUN);
+        }
+    }
 }

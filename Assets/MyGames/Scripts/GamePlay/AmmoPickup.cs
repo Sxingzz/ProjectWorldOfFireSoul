@@ -12,6 +12,10 @@ public class AmmoPickup : MonoBehaviour
         if (playerWeapon)
         {
             playerWeapon.RefillMagazine(magazineSize);
+            if (AudioManager.HasInstance)
+            {
+                AudioManager.Instance.PlaySE(AUDIO.SE_ITEMPICKUP);
+            }
             Destroy(this.gameObject);
         }
     }

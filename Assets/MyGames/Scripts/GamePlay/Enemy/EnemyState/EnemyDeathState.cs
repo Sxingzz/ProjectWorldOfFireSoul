@@ -8,10 +8,12 @@ public class EnemyDeathState : EnemyState
     public Vector3 direction;
 
 
+    public EnemyStateID GetID()
+    {
+        return EnemyStateID.Death;
+    }
     public void Enter(EnemyAgent agent)
     {
-        RemoveEnemyFromList(agent);
-
         if (agent.ragdoll)
         {
             agent.ragdoll.ActiveRagdoll();
@@ -28,40 +30,9 @@ public class EnemyDeathState : EnemyState
     {
 
     }
-
-    public EnemyStateID GetID()
-    {
-        return EnemyStateID.Death;
-    }
-
     public void Update(EnemyAgent agent)
     {
 
     }
-
-    public void RemoveEnemyFromList(EnemyAgent enemy)
-    {
-        if (EnemyAgent.aliveEnemyCount > 0)
-        {
-            EnemyAgent.aliveEnemyCount--;
-            Debug.Log("alive" + EnemyAgent.aliveEnemyCount);
-        }
-        if (EnemyAgent.aliveEnemyCount == 0)
-        {
-            ShowWinPopup();
-            Debug.Log("alive" + EnemyAgent.aliveEnemyCount);
-        }
-    }
-
-    private void ShowWinPopup()
-    {
-        DOVirtual.DelayedCall(2f, () =>
-        {
-            if (UIManager.HasInstance)
-            {
-                string message = "Win";
-                UIManager.Instance.ShowPopup<PopupMessage>(data: message);
-            }
-        });
-    }
+   
 }

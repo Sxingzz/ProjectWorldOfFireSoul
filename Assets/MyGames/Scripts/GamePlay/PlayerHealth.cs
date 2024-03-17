@@ -26,7 +26,7 @@ public class PlayerHealth : Health
             currentHealth = maxHealth;
         }
 
-        DOVirtual.DelayedCall(2f, () =>
+        DOVirtual.DelayedCall(3f, () =>
         {
             if (ListenerManager.HasInstance)
             {
@@ -41,6 +41,10 @@ public class PlayerHealth : Health
         {
             float percent = 1.0f - (currentHealth / maxHealth);
             vignette.intensity.value = percent * 0.4f;
+        }
+        if (ListenerManager.HasInstance)
+        {
+            ListenerManager.Instance.BroadCast(ListenType.UPDATE_HEALTH, this);
         }
 
     }
@@ -57,7 +61,15 @@ public class PlayerHealth : Health
             CameraManager.Instance.EnableKillCam();
         }
 
-        DOVirtual.DelayedCall(2f, () =>
+        Transform enemyThatKilledPlayer = enemyKilledPlayer();
+        CameraManager.Instance.SetEnemyThatKilledPlayer(enemyThatKilledPlayer);
+
+        if (ListenerManager.HasInstance)
+        {
+            ListenerManager.Instance.BroadCast(ListenType.UPDATE_HEALTH, this);
+        }
+
+        DOVirtual.DelayedCall(3f, () =>
         {
             if (UIManager.HasInstance)
             {
@@ -79,5 +91,29 @@ public class PlayerHealth : Health
         {
             ListenerManager.Instance.BroadCast(ListenType.UPDATE_HEALTH, this);
         }
+    }
+    private Transform enemyKilledPlayer()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); // Tìm tất cả các đối tượng có tag "Enemy"
+        GameObject closestEnemy = null;
+        float closestDistance = Mathf.Infinity;
+        foreach (GameObject enemy in enemies)
+        {
+            float distance = Vector3.Distance(enemy.transform.position, transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestEnemy = enemy;
+            }
+        }
+
+        // Ghi nhận enemy đã giết player
+        if (closestEnemy != null && CameraManager.HasInstance)
+        {
+            CameraManager.Instance.SetEnemyThatKilledPlayer(closestEnemy.transform); // Truyền Transform của closestEnemy
+            CameraManager.Instance.EnableKillCam();
+        }
+
+        return closestEnemy != null ? closestEnemy.transform : null; // Trả về Transform của enemy đã giết player, hoặc null nếu không tìm thấy enemy nào
     }
 }

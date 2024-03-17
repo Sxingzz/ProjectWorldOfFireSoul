@@ -19,15 +19,13 @@ public class EnemyAgent : MonoBehaviour
     public float dieForce;
     public float maxSightDistance;
 
-    public float detectionRange = 10f;
+    public float detectionRange = 20f;
 
-    public static int aliveEnemyCount = 0;
+    public float patrolRadius;
 
 
     private void Awake()
     {
-        aliveEnemyCount = 0;
-
         if (DataManager.HasInstance)
         {
             maxTime = DataManager.Instance.DataConfig.MaxTime;
@@ -39,9 +37,6 @@ public class EnemyAgent : MonoBehaviour
 
     void Start()
     {
-        aliveEnemyCount++;
-        Debug.Log("alive "+ aliveEnemyCount);
-
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         navMeshAgent = GetComponent<NavMeshAgent>();
         ragdoll = GetComponent<Ragdoll>();
@@ -54,7 +49,9 @@ public class EnemyAgent : MonoBehaviour
         stateMachine.RegisterState(new EnemyIdleState());
         stateMachine.RegisterState(new EnemyFindWeaponState());
         stateMachine.RegisterState(new EnemyAttackPlayerState());
+        stateMachine.RegisterState(new EnemyPatrolState(navMeshAgent, patrolRadius));
         stateMachine.ChangeState(initState);
+
     }
 
     void Update()
@@ -92,7 +89,7 @@ public class EnemyAgent : MonoBehaviour
             }
         }
 
-        if (stateMachine.currentState == EnemyStateID.ChasePlayer && distanceToPlayer <= 5f)
+        if (stateMachine.currentState == EnemyStateID.ChasePlayer && distanceToPlayer <= 20f)
         {
             stateMachine.ChangeState(EnemyStateID.AttackPlayer);
         }

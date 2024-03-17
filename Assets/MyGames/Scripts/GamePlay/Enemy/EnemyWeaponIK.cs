@@ -81,12 +81,6 @@ public class EnemyWeaponIK : MonoBehaviour
         }
 
         Vector3 targetPosition = GetTargetPosition();
-        //for (int j = 0; j < bonesTransform.Length; j++)
-        //{
-        //    Transform bone = bonesTransform[j];
-        //    float boneWeight = humanBones[j].weight * weight;
-        //    AimAtTarget(bone, targetPosition, boneWeight);
-        //}
         for (int i = 0; i < iterations; i++)
         {
             for (int j = 0; j < bonesTransform.Length; j++)

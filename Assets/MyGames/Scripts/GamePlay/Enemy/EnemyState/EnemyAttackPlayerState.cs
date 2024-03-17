@@ -12,7 +12,7 @@ public class EnemyAttackPlayerState : EnemyState
     {
         agent.weapons.ActivateWeapon();
         agent.weapons.SetTarget(agent.playerTransform);
-        agent.navMeshAgent.stoppingDistance = 5.0f;
+        agent.navMeshAgent.stoppingDistance = 15.0f;
         agent.weapons.SetFiring(true);
     }
 
